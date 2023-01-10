@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 08 Ιαν 2023 στις 13:51:30
+-- Χρόνος δημιουργίας: 10 Ιαν 2023 στις 12:52:22
 -- Έκδοση διακομιστή: 10.4.19-MariaDB
 -- Έκδοση PHP: 8.0.6
 
@@ -35,14 +35,39 @@ CREATE TABLE `admin` (
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `answer_option`
+-- Δομή πίνακα για τον πίνακα `answers`
 --
 
-CREATE TABLE `answer_option` (
-  `OPT` varchar(6) NOT NULL,
-  `OPTtxt` varchar(255) NOT NULL,
-  `Qnext` varchar(3) DEFAULT NULL,
-  `QuestionQID` varchar(3) NOT NULL
+CREATE TABLE `answers` (
+  `ParticipantEmail` varchar(50) NOT NULL,
+  `ans` varchar(6) NOT NULL,
+  `questionnaireID` varchar(5) NOT NULL,
+  `session` varchar(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `keywords`
+--
+
+CREATE TABLE `keywords` (
+  `keyword` varchar(255) NOT NULL,
+  `questionnaireID` varchar(5) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Δομή πίνακα για τον πίνακα `options`
+--
+
+CREATE TABLE `options` (
+  `optID` varchar(6) NOT NULL,
+  `opttxt` varchar(255) NOT NULL,
+  `nextqID` varchar(3) DEFAULT NULL,
+  `qID` varchar(3) NOT NULL,
+  `questionnaireID` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -61,23 +86,26 @@ CREATE TABLE `participant` (
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `participant's_answer`
+-- Δομή πίνακα για τον πίνακα `questionnaire`
 --
 
-CREATE TABLE `participant's_answer` (
-  `ParticipantEmail` varchar(50) NOT NULL,
-  `Answer_OptionOPT` varchar(6) NOT NULL
+CREATE TABLE `questionnaire` (
+  `questionnaireID` varchar(5) NOT NULL,
+  `questionnaireTitle` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `question`
+-- Δομή πίνακα για τον πίνακα `questions`
 --
 
-CREATE TABLE `question` (
-  `QID` varchar(3) NOT NULL,
-  `Qtext` varchar(255) NOT NULL
+CREATE TABLE `questions` (
+  `qID` varchar(3) NOT NULL,
+  `qtext` varchar(255) NOT NULL,
+  `required` varchar(5) NOT NULL,
+  `type` varchar(8) NOT NULL,
+  `questionnaireID` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -91,11 +119,27 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`Admin_ID`);
 
 --
--- Ευρετήρια για πίνακα `answer_option`
+-- Ευρετήρια για πίνακα `answers`
 --
-ALTER TABLE `answer_option`
-  ADD PRIMARY KEY (`OPT`),
-  ADD KEY `ForeignKey` (`QuestionQID`);
+ALTER TABLE `answers`
+  ADD PRIMARY KEY (`ParticipantEmail`,`ans`,`questionnaireID`,`session`),
+  ADD KEY `ForeignKey2` (`ans`),
+  ADD KEY `ForeignKey9` (`questionnaireID`);
+
+--
+-- Ευρετήρια για πίνακα `keywords`
+--
+ALTER TABLE `keywords`
+  ADD PRIMARY KEY (`keyword`,`questionnaireID`),
+  ADD KEY `ForeignKey4` (`questionnaireID`);
+
+--
+-- Ευρετήρια για πίνακα `options`
+--
+ALTER TABLE `options`
+  ADD PRIMARY KEY (`optID`,`questionnaireID`),
+  ADD KEY `ForeignKey` (`qID`),
+  ADD KEY `ForeignKey6` (`questionnaireID`);
 
 --
 -- Ευρετήρια για πίνακα `participant`
@@ -104,34 +148,48 @@ ALTER TABLE `participant`
   ADD PRIMARY KEY (`Email`);
 
 --
--- Ευρετήρια για πίνακα `participant's_answer`
+-- Ευρετήρια για πίνακα `questionnaire`
 --
-ALTER TABLE `participant's_answer`
-  ADD PRIMARY KEY (`ParticipantEmail`,`Answer_OptionOPT`),
-  ADD KEY `ForeignKey2` (`Answer_OptionOPT`);
+ALTER TABLE `questionnaire`
+  ADD PRIMARY KEY (`questionnaireID`);
 
 --
--- Ευρετήρια για πίνακα `question`
+-- Ευρετήρια για πίνακα `questions`
 --
-ALTER TABLE `question`
-  ADD PRIMARY KEY (`QID`);
+ALTER TABLE `questions`
+  ADD PRIMARY KEY (`qID`,`questionnaireID`),
+  ADD KEY `ForeignKey5` (`questionnaireID`);
 
 --
 -- Περιορισμοί για άχρηστους πίνακες
 --
 
 --
--- Περιορισμοί για πίνακα `answer_option`
+-- Περιορισμοί για πίνακα `answers`
 --
-ALTER TABLE `answer_option`
-  ADD CONSTRAINT `ForeignKey` FOREIGN KEY (`QuestionQID`) REFERENCES `question` (`QID`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `answers`
+  ADD CONSTRAINT `ForeignKey2` FOREIGN KEY (`ans`) REFERENCES `options` (`optID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ForeignKey3` FOREIGN KEY (`ParticipantEmail`) REFERENCES `participant` (`Email`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ForeignKey9` FOREIGN KEY (`questionnaireID`) REFERENCES `questionnaire` (`questionnaireID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Περιορισμοί για πίνακα `participant's_answer`
+-- Περιορισμοί για πίνακα `keywords`
 --
-ALTER TABLE `participant's_answer`
-  ADD CONSTRAINT `ForeignKey2` FOREIGN KEY (`Answer_OptionOPT`) REFERENCES `answer_option` (`OPT`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `ForeignKey3` FOREIGN KEY (`ParticipantEmail`) REFERENCES `participant` (`Email`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `keywords`
+  ADD CONSTRAINT `ForeignKey4` FOREIGN KEY (`questionnaireID`) REFERENCES `questionnaire` (`questionnaireID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Περιορισμοί για πίνακα `options`
+--
+ALTER TABLE `options`
+  ADD CONSTRAINT `ForeignKey` FOREIGN KEY (`qID`) REFERENCES `questions` (`QID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ForeignKey6` FOREIGN KEY (`questionnaireID`) REFERENCES `questionnaire` (`questionnaireID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Περιορισμοί για πίνακα `questions`
+--
+ALTER TABLE `questions`
+  ADD CONSTRAINT `ForeignKey5` FOREIGN KEY (`questionnaireID`) REFERENCES `questionnaire` (`questionnaireID`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
