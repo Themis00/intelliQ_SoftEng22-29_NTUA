@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 10 Ιαν 2023 στις 12:52:22
+-- Χρόνος δημιουργίας: 12 Ιαν 2023 στις 12:22:18
 -- Έκδοση διακομιστή: 10.4.19-MariaDB
 -- Έκδοση PHP: 8.0.6
 
@@ -39,10 +39,11 @@ CREATE TABLE `admin` (
 --
 
 CREATE TABLE `answers` (
-  `ParticipantEmail` varchar(50) NOT NULL,
   `ans` varchar(6) NOT NULL,
   `questionnaireID` varchar(5) NOT NULL,
-  `session` varchar(4) NOT NULL
+  `session` varchar(4) NOT NULL,
+  `qID` varchar(3) NOT NULL,
+  `ans_datetime` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -77,10 +78,7 @@ CREATE TABLE `options` (
 --
 
 CREATE TABLE `participant` (
-  `Email` varchar(50) NOT NULL,
-  `Name` varchar(30) NOT NULL,
-  `Surname` varchar(40) NOT NULL,
-  `Birth Date` date NOT NULL
+  `session` varchar(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -105,7 +103,8 @@ CREATE TABLE `questions` (
   `qtext` varchar(255) NOT NULL,
   `required` varchar(5) NOT NULL,
   `type` varchar(8) NOT NULL,
-  `questionnaireID` varchar(5) NOT NULL
+  `questionnaireID` varchar(5) NOT NULL,
+  `answer_string` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -122,9 +121,10 @@ ALTER TABLE `admin`
 -- Ευρετήρια για πίνακα `answers`
 --
 ALTER TABLE `answers`
-  ADD PRIMARY KEY (`ParticipantEmail`,`ans`,`questionnaireID`,`session`),
-  ADD KEY `ForeignKey2` (`ans`),
-  ADD KEY `ForeignKey9` (`questionnaireID`);
+  ADD PRIMARY KEY (`ans`,`questionnaireID`,`session`),
+  ADD KEY `ForeignKey9` (`questionnaireID`),
+  ADD KEY `ForeignKey10` (`session`),
+  ADD KEY `ForeignKey11` (`qID`);
 
 --
 -- Ευρετήρια για πίνακα `keywords`
@@ -145,7 +145,7 @@ ALTER TABLE `options`
 -- Ευρετήρια για πίνακα `participant`
 --
 ALTER TABLE `participant`
-  ADD PRIMARY KEY (`Email`);
+  ADD PRIMARY KEY (`session`);
 
 --
 -- Ευρετήρια για πίνακα `questionnaire`
@@ -168,8 +168,9 @@ ALTER TABLE `questions`
 -- Περιορισμοί για πίνακα `answers`
 --
 ALTER TABLE `answers`
+  ADD CONSTRAINT `ForeignKey10` FOREIGN KEY (`session`) REFERENCES `participant` (`session`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `ForeignKey11` FOREIGN KEY (`qID`) REFERENCES `questions` (`qID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ForeignKey2` FOREIGN KEY (`ans`) REFERENCES `options` (`optID`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `ForeignKey3` FOREIGN KEY (`ParticipantEmail`) REFERENCES `participant` (`Email`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `ForeignKey9` FOREIGN KEY (`questionnaireID`) REFERENCES `questionnaire` (`questionnaireID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
