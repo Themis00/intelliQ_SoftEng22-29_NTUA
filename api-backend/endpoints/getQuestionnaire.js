@@ -25,7 +25,7 @@ function getQuestionnaire(req,res){
                         select qID, qtext, required, type from `questions` where questionnaireID = req.params.questionnaireID order by qID;";
         con.query(myquery, function (err, result, fields) {
             if (err) throw err;
-            console.log(result);
+            res.send(result);
         });
     });
 
