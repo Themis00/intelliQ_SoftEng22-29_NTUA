@@ -20,9 +20,8 @@ function getQuestionnaire(req,res){
 
     con.connect(function(err) {
         if (err) throw err;
-        let myquery= "select questionnaireTitle from `questionnaire` where questionnaireID = req.params.questionnaireID;\
-                        select keyword from `keywords` where questionnaireID = req.params.questionnaireID;\
-                        select qID, qtext, required, type from `questions` where questionnaireID = req.params.questionnaireID order by qID;";
+        console.log("Connected to db");
+        let myquery= "select questionnaireID,questionnaireTitle from `questionnaire` where questionnaireID =" + "'" + req.params.questionnaireID+"';"+"select keyword from keywords where questionnaireID =" + "'" + req.params.questionnaireID+"';"+ "select qID, qtext, required, type from questions where questionnaireID = " + "'" + req.params.questionnaireID+"' order by qID";
         con.query(myquery, function (err, result, fields) {
             if (err) throw err;
             res.send(result);
