@@ -17,4 +17,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+const getQuestionnaire = require("./endpoints/getQuestionnaire.js");
 
+
+app.use('/',getQuestionnaire);
