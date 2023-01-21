@@ -17,7 +17,13 @@ app.get('/', (req, res) => {
   //res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+// System Function
 const getQuestionnaire = require("./endpoints/getQuestionnaire.js");
-
+const getQuestion = require("./endpoints/getQuestion.js");
+const getSessionAnswers = require("./endpoints/getSessionAnswers.js");
+const getQuestionAnswers = require("./endpoints/getQuestionAnswers.js");
 
 app.use('/',getQuestionnaire);
+app.use('/',getQuestion);
+app.use('/',getSessionAnswers);
+app.use('/',getQuestionAnswers);
