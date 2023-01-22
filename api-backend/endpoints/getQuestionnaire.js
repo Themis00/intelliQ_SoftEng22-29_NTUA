@@ -6,11 +6,11 @@ and the questions of the questionnaire with all their attributes
 
 const express = require('express');
 const router = express.Router();
-var mysql = require('mysql');
+var mariadb = require('mariadb/callback');
 
 function getQuestionnaire(req,res){
 
-    var con = mysql.createConnection({
+    var con = mariadb.createConnection({
         host: "localhost",
         user: "root",
         password: "",

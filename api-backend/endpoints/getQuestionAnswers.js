@@ -6,11 +6,11 @@ all sessions) in a specific question of a specific questionnaire.
 
 const express = require('express');
 const router = express.Router();
-var mysql = require('mysql');
+var mariadb = require('mariadb/callback');
 
 function getQuestionAnswers(req,res){
 
-    var con = mysql.createConnection({
+    var con = mariadb.createConnection({
         host: "localhost",
         user: "root",
         password: "",
