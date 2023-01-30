@@ -38,36 +38,49 @@ function questionnaire_update(req,res){
             if (err) throw err;
         });
 
-        // Insert questions and options data
+        // Insert questions data
         let questionsList = req.body.questions;
+        myquery = "insert into `questions` values ";
+        for(let i=0; i<questionsList.length; i++){
+            myquery += "(" + "'" + questionsList[i]["qID"] + "'," + "'" + questionsList[i]["qtext"] + "'," + "'" + questionsList[i]["required"] + "'," + "'" + questionsList[i]["type"] + "'," + "'" + questionnaireID + "')";
+            if (i < questionsList.length-1){ // If we have more options left to add
+                myquery += ","
+            }
+            else{
+                myquery += ";"
+            }
+        }
+        connection.query(myquery, function (err, result, fields) {
+            if (err) throw err;
+        });
+        
+        // Insert options data
         let myquery2 = ""; // Initialize query for options insert
         let optionList = questionsList[0]["options"]; // Initialize list of options of a question 
-        for(let i=0; i<questionsList.length; i++){
-            myquery = "insert into `questions` values (" + "'" + questionsList[i]["qID"] + "'," + "'" + questionsList[i]["qtext"] + "'," + "'" + questionsList[i]["required"] + "'," + "'" + questionsList[i]["type"] + "'," + "'" + questionnaireID + "');";
-            connection.query(myquery, function (err, result, fields) {
-                if (err) throw err;
-            });
+        for(let i=0; i<questionsList.length; i++){ // For all questions
             optionList = questionsList[i]["options"]; // Update option list for current question
-            myquery2 = "insert into `options` values "; // Reset query string for options insert
-            for(let j=0; j<optionList.length; j++){
-                myquery2 += "(" + "'" + optionList[j]["optID"] + "'," + "'" + optionList[j]["opttxt"] + "'," + "'" + optionList[j]["nextqID"] + "'," + "'" + questionsList[i]["qID"] + "'," + "'" + questionnaireID + "')"; // Add every option tuple of a question in the query string
-                if (j < optionList.length-1){
-                    myquery2 += ","
+                myquery2 = "insert into `options` values "; // Reset query string for options insert
+                for(let j=0; j<optionList.length; j++){ // Add every option tuple of a question in the query string
+                    if(optionList[j]["nextqID"] != "-"){
+                        myquery2 += "(" + "'" + optionList[j]["optID"] + "'," + "'" + optionList[j]["opttxt"] + "'," + "'" + optionList[j]["nextqID"] + "'," + "'" + questionsList[i]["qID"] + "'," + "'" + questionnaireID + "')"; 
+                    }
+                    else{ // If nextqID = '-', that is there is not next question, insert the value null in the corresponding database column
+                        myquery2 += "(" + "'" + optionList[j]["optID"] + "'," + "'" + optionList[j]["opttxt"] + "'," + "null," + "'" + questionsList[i]["qID"] + "'," + "'" + questionnaireID + "')"; 
+                    }
+                    if (j < optionList.length-1){ // If we have more options left to add
+                        myquery2 += ","
+                    }
+                    else{
+                        myquery2 += ";"
+                    }
                 }
-                else{
-                    myquery2 += ";"
-                }
+                connection.query(myquery2, function (err, result, fields) {
+                    if (err) throw err;
+                });
             }
-            connection.query(myquery2, function (err, result, fields) {
-                if (err) throw err;
-            });
-        }
-        
+            
         connection.release();
     });
-    /*let questionsList = req.body.questions;
-    let optionList = questionsList[1]["options"];
-    res.send(optionList[0]["optID"]);*/
 }
 
 router.post('/admin/questionnaire_upd',questionnaire_update)

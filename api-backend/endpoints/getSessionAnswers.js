@@ -17,7 +17,7 @@ function getSessionAnswers(req,res){
         console.log("Connected to db");
         let myquery= "select questionnaireID from `questionnaire` where questionnaireID =" + "'" + req.params.questionnaireID+"';"+
             "select session from `participant` where session =" + "'" + req.params.session+"';"+
-            "select qID, ans, ans_str from `answers` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and session =" + "'" + req.params.session+"'"+ "order by qID";
+            "select qID, ans, ans_str from `answers` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and session =" + "'" + req.params.session+"'"+ "and ans is not null order by qID";
         connection.query(myquery, function (err, result, fields) {
             if (err) throw err;
             res.send(result);
