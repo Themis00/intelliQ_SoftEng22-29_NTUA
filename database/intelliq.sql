@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Εξυπηρετητής: 127.0.0.1
--- Χρόνος δημιουργίας: 29 Ιαν 2023 στις 23:39:28
+-- Χρόνος δημιουργίας: 30 Ιαν 2023 στις 19:23:04
 -- Έκδοση διακομιστή: 10.4.19-MariaDB
 -- Έκδοση PHP: 8.0.6
 
@@ -46,17 +46,6 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Δομή πίνακα για τον πίνακα `admin`
---
-
-CREATE TABLE `admin` (
-  `Admin_ID` varchar(15) NOT NULL,
-  `Password` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Δομή πίνακα για τον πίνακα `answers`
 --
 
@@ -80,6 +69,15 @@ CREATE TABLE `keywords` (
   `questionnaireID` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Άδειασμα δεδομένων του πίνακα `keywords`
+--
+
+INSERT INTO `keywords` (`keyword`, `questionnaireID`) VALUES
+('footbal', 'QQ000'),
+('islands', 'QQ000'),
+('timezone', 'QQ000');
+
 -- --------------------------------------------------------
 
 --
@@ -94,6 +92,39 @@ CREATE TABLE `options` (
   `questionnaireID` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Άδειασμα δεδομένων του πίνακα `options`
+--
+
+INSERT INTO `options` (`optID`, `opttxt`, `nextqID`, `qID`, `questionnaireID`) VALUES
+('P00TXT', '<open string>', 'P01', 'P00', 'QQ000'),
+('P01A1', '<30', 'Q01', 'P01', 'QQ000'),
+('P01A2', '30-50', 'Q01', 'P01', 'QQ000'),
+('P01A3', '50-70', 'Q01', 'P01', 'QQ000'),
+('P01A4', '>70', 'Q01', 'P01', 'QQ000'),
+('Q01A1', 'Πράσινο', 'Q02', 'Q01', 'QQ000'),
+('Q01A2', 'Κόκκινο', 'Q02', 'Q01', 'QQ000'),
+('Q01A3', 'Κίτρινο', 'Q02', 'Q01', 'QQ000'),
+('Q02A1', 'Ναι', 'Q03', 'Q02', 'QQ000'),
+('Q02A2', 'Οχι', 'Q04', 'Q02', 'QQ000'),
+('Q03A1', 'Παναθηναϊκός', 'Q04', 'Q03', 'QQ000'),
+('Q03A2', 'Ολυμπιακός', 'Q04', 'Q03', 'QQ000'),
+('Q03A3', 'ΑΕΚ', 'Q04', 'Q03', 'QQ000'),
+('Q04A1', 'Ναι', 'Q05', 'Q04', 'QQ000'),
+('Q04A2', 'Οχι', 'Q06', 'Q04', 'QQ000'),
+('Q05A1', 'Καμία', 'Q07', 'Q05', 'QQ000'),
+('Q05A2', 'Μικρή', 'Q07', 'Q05', 'QQ000'),
+('Q05A3', 'Μεγάλη', 'Q07', 'Q05', 'QQ000'),
+('Q06A1', 'Ναι', 'Q07', 'Q06', 'QQ000'),
+('Q06A2', 'Οχι', 'Q07', 'Q06', 'QQ000'),
+('Q07A1', 'Σπάνια - καθόλου', 'Q08', 'Q07', 'QQ000'),
+('Q07A2', 'Περιστασιακά', 'Q08', 'Q07', 'QQ000'),
+('Q07A3', 'Τακτικά', 'Q08', 'Q07', 'QQ000'),
+('Q08A1', 'Ναι', NULL, 'Q08', 'QQ000'),
+('Q08A2', 'Οχι', 'Q09', 'Q08', 'QQ000'),
+('Q09A1', 'Θερινή', NULL, 'Q09', 'QQ000'),
+('Q09A2', 'Χειμερινή', NULL, 'Q09', 'QQ000');
+
 -- --------------------------------------------------------
 
 --
@@ -103,6 +134,14 @@ CREATE TABLE `options` (
 CREATE TABLE `participant` (
   `session` varchar(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Άδειασμα δεδομένων του πίνακα `participant`
+--
+
+INSERT INTO `participant` (`session`) VALUES
+('1111'),
+('1112');
 
 -- --------------------------------------------------------
 
@@ -114,6 +153,13 @@ CREATE TABLE `questionnaire` (
   `questionnaireID` varchar(5) NOT NULL,
   `questionnaireTitle` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Άδειασμα δεδομένων του πίνακα `questionnaire`
+--
+
+INSERT INTO `questionnaire` (`questionnaireID`, `questionnaireTitle`) VALUES
+('QQ000', 'My first research questionnaire');
 
 -- --------------------------------------------------------
 
@@ -130,22 +176,34 @@ CREATE TABLE `questions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Ευρετήρια για άχρηστους πίνακες
+-- Άδειασμα δεδομένων του πίνακα `questions`
 --
 
+INSERT INTO `questions` (`qID`, `qtext`, `required`, `type`, `questionnaireID`) VALUES
+('P00', 'Ποιο είναι το mail σας;', 'FALSE', 'profile', 'QQ000'),
+('P01', 'Ποια είναι η ηλικία σας;', 'TRUE', 'profile', 'QQ000'),
+('Q01', 'Ποιο είναι το αγαπημένο σας χρώμα;', 'TRUE', 'question', 'QQ000'),
+('Q02', 'Ασχολείστε με το ποδόσφαιρο;', 'TRUE', 'question', 'QQ000'),
+('Q03', 'Τι ομάδα είστε;', 'TRUE', 'question', 'QQ000'),
+('Q04', 'Έχετε ζήσει σε νησί;', 'TRUE', 'question', 'QQ000'),
+('Q05', 'Με δεδομένο ότι απαντήσατε [*Q04A1] στην ερώτηση [*Q04]: Ποια η σχέση σας με το θαλάσσιο σκι;', 'TRUE', 'question', 'QQ000'),
+('Q06', 'Είστε χειμερινός κολυμβητής', 'TRUE', 'question', 'QQ000'),
+('Q07', 'Κάνετε χειμερινό σκι;', 'TRUE', 'question', 'QQ000'),
+('Q08', 'Συμφωνείτε να αλλάζει η ώρα κάθε χρόνο;', 'TRUE', 'question', 'QQ000'),
+('Q09', 'Με δεδομένο ότι απαντήσατε [*Q08A2] στην ερώτηση [*Q08]: Προτιμάτε τη θερινή ή την χειμερινή ώρα;', 'TRUE', 'question', 'QQ000');
+
 --
--- Ευρετήρια για πίνακα `admin`
+-- Ευρετήρια για άχρηστους πίνακες
 --
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`Admin_ID`);
 
 --
 -- Ευρετήρια για πίνακα `answers`
 --
 ALTER TABLE `answers`
   ADD PRIMARY KEY (`questionnaireID`,`session`,`qID`),
-  ADD KEY `ForeignKey10` (`session`),
-  ADD KEY `ForeignKey11` (`qID`);
+  ADD KEY `AnsForeignKey` (`ans`),
+  ADD KEY `AnsQIDForeignKey` (`qID`),
+  ADD KEY `SessionForeignKey` (`session`);
 
 --
 -- Ευρετήρια για πίνακα `keywords`
@@ -185,6 +243,15 @@ ALTER TABLE `questions`
 --
 -- Περιορισμοί για άχρηστους πίνακες
 --
+
+--
+-- Περιορισμοί για πίνακα `answers`
+--
+ALTER TABLE `answers`
+  ADD CONSTRAINT `AnsForeignKey` FOREIGN KEY (`ans`) REFERENCES `options` (`optID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `AnsQIDForeignKey` FOREIGN KEY (`qID`) REFERENCES `questions` (`QID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `AnsQuesIDForeignKey` FOREIGN KEY (`questionnaireID`) REFERENCES `questionnaire` (`questionnaireID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `SessionForeignKey` FOREIGN KEY (`session`) REFERENCES `participant` (`session`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Περιορισμοί για πίνακα `keywords`

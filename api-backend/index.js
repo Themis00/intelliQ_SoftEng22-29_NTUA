@@ -21,16 +21,25 @@ app.get('/', (req, res) => {
 });
 
 // Admin Endpoints
+const healthcheck = require("./admin/healthcheck.js");
 const questionnaireUpd = require("./admin/questionnaireUpd.js");
+const resetall = require("./admin/resetall.js");
+const resetq = require("./admin/resetq.js");
+
+app.use('/',healthcheck);
 app.use('/',questionnaireUpd);
+app.use('/',resetall);
+app.use('/',resetq);
 
 // System Function
 const getQuestionnaire = require("./endpoints/getQuestionnaire.js");
 const getQuestion = require("./endpoints/getQuestion.js");
+const doanswer = require("./endpoints/doanswer.js");
 const getSessionAnswers = require("./endpoints/getSessionAnswers.js");
 const getQuestionAnswers = require("./endpoints/getQuestionAnswers.js");
 
 app.use('/',getQuestionnaire);
 app.use('/',getQuestion);
+app.use('/',doanswer);
 app.use('/',getSessionAnswers);
 app.use('/',getQuestionAnswers);

@@ -9,7 +9,7 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
-function getQuestionAnswers(req,res){
+function getQuestionAnswersRequest(req,res){
 
     const pool = require(path.resolve("db_connection/getPool.js"));
     pool.getConnection(function(err,connection) {
@@ -21,12 +21,13 @@ function getQuestionAnswers(req,res){
             "select session, ans from `answers` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"'"+ "and ans not like '%TXT' and ans is not null order by ans_datetime desc";
         connection.query(myquery, function (err, result, fields) {
             if (err) throw err;
-            res.send(result);
+            res.status(200).send(result);
         });
         connection.release();
+        console.log("Disconnected from db");
     });
 
 }
 
-router.get('/getquestionanswers/:questionnaireID/:questionID',getQuestionAnswers)
+router.get('/getquestionanswers/:questionnaireID/:questionID',getQuestionAnswersRequest)
 module.exports = router; 

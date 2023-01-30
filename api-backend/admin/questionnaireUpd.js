@@ -78,8 +78,9 @@ function questionnaire_update(req,res){
                     if (err) throw err;
                 });
             }
-            
+        res.status(200).send({"status":"Success"});    
         connection.release();
+        console.log("Disconnected from db");
     });
 }
 
