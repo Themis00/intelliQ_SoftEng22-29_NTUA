@@ -3,6 +3,9 @@ const app = express();
 const port = 9103;
 //const bodyparser = require('body-parser');
 var path = require('path');
+const bp = require('body-parser')
+app.use(bp.json())
+app.use(bp.urlencoded({ extended: true }))
 
 //middlewares
 //app.use(bodyParser.json());
@@ -17,13 +20,26 @@ app.get('/', (req, res) => {
   //res.sendFile(path.join(__dirname + '/index.html'));
 });
 
+// Admin Endpoints
+const healthcheck = require("./admin/healthcheck.js");
+const questionnaireUpd = require("./admin/questionnaireUpd.js");
+const resetall = require("./admin/resetall.js");
+const resetq = require("./admin/resetq.js");
+
+app.use('/',healthcheck);
+app.use('/',questionnaireUpd);
+app.use('/',resetall);
+app.use('/',resetq);
+
 // System Function
 const getQuestionnaire = require("./endpoints/getQuestionnaire.js");
 const getQuestion = require("./endpoints/getQuestion.js");
+const doanswer = require("./endpoints/doanswer.js");
 const getSessionAnswers = require("./endpoints/getSessionAnswers.js");
 const getQuestionAnswers = require("./endpoints/getQuestionAnswers.js");
 
 app.use('/',getQuestionnaire);
 app.use('/',getQuestion);
+app.use('/',doanswer);
 app.use('/',getSessionAnswers);
 app.use('/',getQuestionAnswers);
