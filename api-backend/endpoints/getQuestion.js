@@ -19,7 +19,12 @@ function getQuestionRequest(req,res){
             "select optID, opttxt, nextqID from `options` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"'"+ "order by optID";
         connection.query(myquery, function (err, result, fields) {
             if (err) throw err;
-            res.status(200).send(result);
+            //------------------ Modify JSON in order to have the wanted syntax -----------------------
+            let temp1 = JSON.stringify(result[0][0]).slice(0,-1)
+            let temp2 = JSON.stringify(result[1])
+            let json_str = temp1 + ",\"options\":" + temp2 + "}";
+            //-----------------------------------------------------------------------------------------
+            res.status(200).send(JSON.parse(json_str));
         });
         connection.release();
         console.log("Disconnected from db");
