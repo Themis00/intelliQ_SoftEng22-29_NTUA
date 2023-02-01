@@ -9,32 +9,77 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
+const {WrongDataError} = require(path.resolve("customErrors.js")); 
+
+
 async function getQuestionRequest(req,res){
 
-    const pool = require(path.resolve("db_connection/getPool.js"));
+    try{
+  
+        const pool = require(path.resolve("db_connection/getPool.js"));
 
-    await new Promise(() => pool.getConnection(async function(err,connection) {
-        
-        if (err) throw err;
-        console.log("Connected to db");
+        let json_str1 = await new Promise((resolve,reject) => pool.getConnection(async function(err,connection) {
+            
+            if (err){ // Connection error
+                reject(err); // Throw exception outside function
+                return;
+            } 
+            console.log("Connected to db");
 
-        let myquery= "select questionnaireID, qID, qtext, required, type from `questions` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"';"+
-            "select optID, opttxt, nextqID from `options` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"'"+ "order by optID";
+            let myquery= "select questionnaireID, qID, qtext, required, type from `questions` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"';"+
+                "select optID, opttxt, nextqID from `options` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"'"+ "order by optID";
+    
+            await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
 
-        await new Promise(() => connection.query(myquery, function (err, result, fields) {
-            if (err) throw err;
-            //------------------ Modify JSON in order to have the wanted syntax -----------------------
-            let temp1 = JSON.stringify(result[0][0]).slice(0,-1);
-            let temp2 = JSON.stringify(result[1]);
-            let json_str = temp1 + ",\"options\":" + temp2 + "}";
-            //-----------------------------------------------------------------------------------------
-            res.status(200).send(JSON.parse(json_str));
-        }));
+                if (err){
+                    reject(err);
+                    return;
+                }
+                if(result[0].length == 0){ // If there is not such question in that questionnaire
+                    reject(new WrongDataError("There is no question " + req.params.questionID + " in questionnaire " + req.params.questionnaireID + "."));
+                    return;
+                }
 
-        connection.release();
-        console.log("Disconnected from db");
+                //------------------ Modify JSON in order to have the wanted syntax -----------------------
+                let temp1 = JSON.stringify(result[0][0]).slice(0,-1);
+                let temp2 = JSON.stringify(result[1]);
+                let json_str_inner = temp1 + ",\"options\":" + temp2 + "}";
+                //-----------------------------------------------------------------------------------------
+                resolve(json_str_inner);
+                return;
 
-    }));
+            })).then((json_str)=>{ // If code runs without errors pass json string outside function
+                connection.release();
+                console.log("Disconnected from db");
+                resolve(json_str);
+                return;
+
+            }).catch(function(err){ // Throw exception outside function
+
+                if(connection){ // If exception does not occur due to database connection error, release the existent connection
+                    connection.release();
+                    console.log("Disconnected from db");
+                }
+
+                reject(err);
+                return;
+            });  
+
+        })).catch(function(err){ // Throw exception outside function
+            throw err;  
+        });
+
+        res.status(200).send(JSON.parse(json_str1));
+
+    }
+    catch(err){ // All exception handling takes place here
+        if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
+            res.status(500).send(err);
+        }
+        else if(err instanceof WrongDataError){
+            res.status(402).send(err);
+        }
+    }
 
 }
 
