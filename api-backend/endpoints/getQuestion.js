@@ -9,7 +9,7 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
-const {WrongDataError} = require(path.resolve("customErrors.js")); 
+const {WrongEntryError} = require(path.resolve("customErrors.js")); 
 
 
 async function getQuestionRequest(req,res){
@@ -35,8 +35,8 @@ async function getQuestionRequest(req,res){
                     reject(err);
                     return;
                 }
-                if(result[0].length == 0){ // If there is not such question in that questionnaire
-                    reject(new WrongDataError("There is no question " + req.params.questionID + " in questionnaire " + req.params.questionnaireID + "."));
+                if(result[0].length == 0){ // If there is no such questionnaire-question pair 
+                    reject(new WrongEntryError("Τhere is no such questionnaire-question pair."));
                     return;
                 }
 
@@ -76,7 +76,7 @@ async function getQuestionRequest(req,res){
         if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
             res.status(500).send(err);
         }
-        else if(err instanceof WrongDataError){
+        else if(err instanceof WrongEntryError){
             res.status(402).send(err);
         }
     }

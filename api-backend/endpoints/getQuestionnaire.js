@@ -9,37 +9,94 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
-function getQuestionnaireRequest(req,res){
-    
-    const pool = require(path.resolve("db_connection/getPool.js"));
-    pool.getConnection(function(err,connection) {
-        if (err) throw err;
-        console.log("Connected to db");
-        let myquery= "select questionnaireID,questionnaireTitle from `questionnaire` where questionnaireID =" + "'" + req.params.questionnaireID+"';"+
-            "select keyword from keywords where questionnaireID =" + "'" + req.params.questionnaireID+"';"+ 
-            "select qID, qtext, required, type from questions where questionnaireID = " + "'" + req.params.questionnaireID+"' order by qID";
-        connection.query(myquery, function (err, result, fields) {
-            if (err) throw err;
-            //------------------ Modify JSON in order to have the wanted syntax -----------------------
-            let temp1 = JSON.stringify(result[0][0]).slice(0,-1)
-            let temp2 = ",\"keywords\":[";
-            for(let i=0; i<result[1].length; i++){ // Add each keyword
-                temp2 += "\"" + result[1][i]["keyword"] + "\"";
-                if (i < result[1].length-1){ // If we have more keywords left to add
-                    temp2 += ","
+const {WrongEntryError} = require(path.resolve("customErrors.js"));
+
+async function getQuestionnaireRequest(req,res){
+
+    try{
+        const pool = require(path.resolve("db_connection/getPool.js"));
+        let json_str1 = await new Promise((resolve,reject) => pool.getConnection(async function(err,connection) {
+            
+            if (err){ // Connection error
+                reject(err); // Throw exception outside function
+                return;
+            } 
+            
+            console.log("Connected to db");
+            
+            let myquery= "select questionnaireID,questionnaireTitle from `questionnaire` where questionnaireID =" + "'" + req.params.questionnaireID+"';"+
+                "select keyword from keywords where questionnaireID =" + "'" + req.params.questionnaireID+"';"+ 
+                "select qID, qtext, required, type from questions where questionnaireID = " + "'" + req.params.questionnaireID+"' order by qID";
+            
+            await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
+                
+                if (err){
+                    reject(err);
+                    return;
                 }
-                else{
-                    temp2 += "]"
+
+                if(result[0].length == 0){ // If there is no such questionnaire
+                    reject(new WrongEntryError("There is no such questionnaire."));
+                    return;
                 }
-            }
-            let temp3 = JSON.stringify(result[2]);
-            let json_str = temp1+ temp2 + ",\"questions\":" + temp3 + "}";
-            //-----------------------------------------------------------------------------------------
-            res.status(200).send(JSON.parse(json_str));
+                
+                //------------------ Modify JSON in order to have the wanted syntax -----------------------
+                let temp1 = JSON.stringify(result[0][0]).slice(0,-1)
+                let temp2 = ",\"keywords\":";
+                if(result[1].length == 0){ // If there are no keywords
+                    temp2 += "null";
+                }
+                for(let i=0; i<result[1].length; i++){ // Add each keyword
+                    if(i == 0){
+                        temp2 += "["; // At first iteration
+                    }
+                    temp2 += "\"" + result[1][i]["keyword"] + "\"";
+                    if (i < result[1].length-1){ // If we have more keywords left to add
+                        temp2 += ","
+                    }
+                    else{
+                        temp2 += "]"
+                    }
+                }
+                let temp3 = JSON.stringify(result[2]);
+                let json_str_inner = temp1+ temp2 + ",\"questions\":" + temp3 + "}";
+                //-----------------------------------------------------------------------------------------
+                resolve(json_str_inner);
+                return;
+            }))
+            .then((json_str)=>{ // If code runs without errors pass json string outside function
+                connection.release();
+                console.log("Disconnected from db");
+                resolve(json_str);
+                return;
+
+            })
+            .catch(function(err){ // Throw exception outside function
+
+                if(connection){ // If exception does not occur due to database connection error, release the existent connection
+                    connection.release();
+                    console.log("Disconnected from db");
+                }
+
+                reject(err);
+                return;
+            });
+           
+        }))
+        .catch(function(err){ // Throw exception outside function
+            throw err;  
         });
-        connection.release();
-        console.log("Disconnected from db");
-    });
+
+        res.status(200).send(JSON.parse(json_str1));
+    }
+    catch(err){
+        if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
+            res.status(500).send(err);
+        }
+        else if(err instanceof WrongEntryError){
+            res.status(402).send(err);
+        }
+    }
 
 }
 

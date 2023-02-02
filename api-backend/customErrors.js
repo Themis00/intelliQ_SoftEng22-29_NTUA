@@ -8,11 +8,17 @@ class Error {
   }
 
 module.exports = {
-    WrongDataError: class extends Error{
+    WrongEntryError: class extends Error{
         constructor(message) {
             super(message);
-            this.name = "WrongDataError";
+            this.name = "WrongEntryError";
         }
-    }
+    },
+    NoDataError: class extends Error{
+      constructor(message) {
+          super(message);
+          this.name = "NoDataError";
+      }
+  }
 } 
 
