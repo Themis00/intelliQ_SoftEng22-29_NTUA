@@ -49,6 +49,7 @@ async function getQuestionRequest(req,res){
                 return;
 
             })).then((json_str)=>{ // If code runs without errors pass json string outside function
+                
                 connection.release();
                 console.log("Disconnected from db");
                 resolve(json_str);
