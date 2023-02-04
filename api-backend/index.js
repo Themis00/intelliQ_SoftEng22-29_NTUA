@@ -7,6 +7,15 @@ const bp = require('body-parser')
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
+/*
+process.on('uncaughtException', function (err) {
+  console.log("Error with code:" + err.code);
+  if(err.code == 'ECONNREFUSED'){
+    console.log("Unable to connect to database!");
+  }
+});
+*/
+
 //middlewares
 //app.use(bodyParser.json());
 
