@@ -7,12 +7,12 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
-const {WrongEntryError} = require(path.resolve("customErrors.js")); 
+const {WrongEntryError, NoDataError} = require(path.resolve("customErrors.js")); 
 
 async function resetqRequest(req,res){
 
     try{
-        console.log("1");
+        
         const pool = require(path.resolve("db_connection/getPool.js"));
         
         await new Promise((resolve,reject) => pool.getConnection(async function(err,connection) {
@@ -29,17 +29,16 @@ async function resetqRequest(req,res){
                 "select ans from `answers` where questionnaireID =" + "'" + req.params.questionnaireID+"';";
             
             help_result = await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
-                console.log("2");
+             
                 if (err){
                     reject(err);
                     return;
                 }
-                console.log("2.1");
+              
                 resolve(result);
                 return;
             }))
             .catch(function(err){ // Throw exception outside function, release the existent connection
-                console.log("3");
                 if(connection){ // If exception does not occur due to database connection error, release the existent connection
                     connection.release();
                     console.log("Disconnected from db");
@@ -48,9 +47,7 @@ async function resetqRequest(req,res){
                 return;
             });
 
-            console.log("4");
             if(help_result[0].length == 0){ // If there is no such questionnaire
-                console.log("2.2");
                 if(connection){
                     connection.release();
                     console.log("Disconnected from db");
@@ -59,12 +56,11 @@ async function resetqRequest(req,res){
                 return;
             }
             else if(help_result[1].length == 0){ // If there are no answer inserts in this questionnaire
-                console.log("2.3");
                 if(connection){
                     connection.release();
                     console.log("Disconnected from db");
                 }
-                reject(new WrongEntryError("No answers found to delete for questionnaire "+ req.params.questionnaireID+"."));
+                reject(new NoDataError("No answers found to delete for questionnaire "+ req.params.questionnaireID+"."));
                 return;
             }
             //----------------------------------------------------------------------------------------------------------------------------
@@ -72,7 +68,6 @@ async function resetqRequest(req,res){
             myquery= "delete from `answers` where questionnaireID =" + "'" + req.params.questionnaireID + "';";
             
             await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
-                console.log("5");
                 if (err){ // Connection error
                     reject(err); // Throw exception outside function
                     return;
@@ -94,10 +89,9 @@ async function resetqRequest(req,res){
                 return;
             });
         })).catch(function(err){ // Throw exception outside function
-            console.log("6");
             throw err;  
         });
-        console.log("7");
+      
         res.status(200).send({"status":"OK"});
 
     }
@@ -106,7 +100,13 @@ async function resetqRequest(req,res){
             res.status(500).send({"status":"failed","reason":"No connection to database"});
         }
         else if(err instanceof WrongEntryError){
-            res.status(402).send({"status":"failed","reason":err.message});
+            res.status(400).send({"status":"failed","reason":err.message});
+        }
+        else if(err instanceof NoDataError){
+            res.status(404).send({"status":"failed","reason":err.message});
+        }
+        else{ // For any other error
+            res.status(500).send({"status":"failed","reason":err.text});
         }
     }
 

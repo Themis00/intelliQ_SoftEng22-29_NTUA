@@ -91,10 +91,16 @@ async function getQuestionnaireRequest(req,res){
     }
     catch(err){
         if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
-            res.status(500).send(err);
+            res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
         }
         else if(err instanceof WrongEntryError){
-            res.status(402).send(err);
+            res.status(400).send(err);
+        }
+        else if(err instanceof mariadb.SqlError){
+            res.status(400).send({"name":err.name,"code":err.code,"message":err.text}); // For any other sql error
+        }
+        else{ // For any other error
+            res.status(500).send(err);
         }
     }
 

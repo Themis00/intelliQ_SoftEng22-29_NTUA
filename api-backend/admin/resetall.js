@@ -7,7 +7,7 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
-const {WrongEntryError} = require(path.resolve("customErrors.js")); 
+const {NoDataError} = require(path.resolve("customErrors.js")); 
 
 async function resetAllRequest(req,res){
 
@@ -49,7 +49,7 @@ async function resetAllRequest(req,res){
                     connection.release();
                     console.log("Disconnected from db");
                 }
-                reject(new WrongEntryError("No data found to delete."));
+                reject(new NoDataError("No data found to delete."));
                 return;
             }
             //-------------------------------------------------------------------------------------------------------------------------------
@@ -87,8 +87,11 @@ async function resetAllRequest(req,res){
         if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
             res.status(500).send({"status":"failed","reason":"No connection to database"});
         }
-        else if(err instanceof WrongEntryError){
-            res.status(402).send({"status":"failed","reason":err.message});
+        else if(err instanceof NoDataError){
+            res.status(404).send({"status":"failed","reason":err.message});
+        }
+        else{ // For any other error
+            res.status(500).send({"status":"failed","reason":err.text});
         }
     }
 

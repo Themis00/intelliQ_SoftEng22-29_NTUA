@@ -43,8 +43,8 @@ async function getSessionAnswersRequest(req,res){
                     reject(new WrongEntryError("There is no such session."));
                     return;
                 }
-                else if(result[2].length == 0){ // If there are no answers
-                    reject(new NoDataError("Session " + req.params.session + " not for questionnaire " + req.params.questionnaireID + " or all answers are null."));
+                else if(result[2].length == 0){ // If session was created for another questionnaire or no answers were given
+                    reject(new NoDataError("Session " + req.params.session + " is not for questionnaire " + req.params.questionnaireID + " or all answers are null."));
                     return;
                 }
                 
@@ -92,10 +92,19 @@ async function getSessionAnswersRequest(req,res){
 
     catch(err){
         if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
-            res.status(500).send(err);
+            res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
         }
-        else if(err instanceof WrongEntryError || err instanceof NoDataError){
-            res.status(402).send(err);
+        else if(err instanceof WrongEntryError){
+            res.status(400).send(err);
+        }
+        else if(err instanceof NoDataError){
+            res.status(404).send(err);
+        }
+        else if(err instanceof mariadb.SqlError){
+            res.status(400).send({"name":err.name,"code":err.code,"message":err.text}); // For any other sql error
+        }
+        else{ // For any other error
+            res.status(500).send(err);
         }
     }
 

@@ -35,10 +35,10 @@ const questionnaireUpd = require("./admin/questionnaireUpd.js");
 const resetall = require("./admin/resetall.js");
 const resetq = require("./admin/resetq.js");
 
-app.use('/',healthcheck);
-app.use('/',questionnaireUpd);
-app.use('/',resetall);
-app.use('/',resetq);
+app.use('/intelliq_api',healthcheck);
+app.use('/intelliq_api',questionnaireUpd);
+app.use('/intelliq_api',resetall);
+app.use('/intelliq_api',resetq);
 
 // System Function
 const getQuestionnaire = require("./endpoints/getQuestionnaire.js");
@@ -47,8 +47,8 @@ const doanswer = require("./endpoints/doanswer.js");
 const getSessionAnswers = require("./endpoints/getSessionAnswers.js");
 const getQuestionAnswers = require("./endpoints/getQuestionAnswers.js");
 
-app.use('/',getQuestionnaire);
-app.use('/',getQuestion);
-app.use('/',doanswer);
-app.use('/',getSessionAnswers);
-app.use('/',getQuestionAnswers);
+app.use('/intelliq_api',getQuestionnaire);
+app.use('/intelliq_api',getQuestion);
+app.use('/intelliq_api',doanswer);
+app.use('/intelliq_api',getSessionAnswers);
+app.use('/intelliq_api',getQuestionAnswers);
