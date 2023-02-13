@@ -19,6 +19,12 @@ module.exports = {
           super(message);
           this.name = "NoDataError";
       }
-  }
+  },
+  FormatQueryParamError: class extends Error{
+    constructor(message) {
+        super(message);
+        this.name = "FormatQueryParamError";
+    }
+}
 } 
 
