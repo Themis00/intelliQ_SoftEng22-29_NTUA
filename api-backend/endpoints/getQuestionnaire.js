@@ -8,12 +8,15 @@ const express = require('express');
 const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
+const converter = require('json-2-csv');
+const CSV = require('csv-string');
 
 const {WrongEntryError} = require(path.resolve("customErrors.js"));
 
 async function getQuestionnaireRequest(req,res){
 
     try{
+  
         const pool = require(path.resolve("db_connection/getPool.js"));
         let json_str1 = await new Promise((resolve,reject) => pool.getConnection(async function(err,connection) {
             
@@ -87,7 +90,16 @@ async function getQuestionnaireRequest(req,res){
             throw err;  
         });
 
-        res.status(200).send(JSON.parse(json_str1));
+        if(!req.query.format || req.query.format == "json"){
+            res.status(200).send(JSON.parse(json_str1));
+        }
+        else if(req.query.format == "csv"){
+            let csv = await converter.json2csvAsync(JSON.parse(json_str1)).catch(function(err){throw err;});
+            let arr = CSV.parse(csv);
+            res.status(200).send(arr);
+        }
+        else throw(new WrongEntryError("Not valid \"format\" parameter. Try \"json\", \"csv\" or nothing."));
+        
     }
     catch(err){
         if(err.code == "ER_GET_CONNECTION_TIMEOUT"){

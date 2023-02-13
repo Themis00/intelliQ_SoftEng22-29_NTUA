@@ -1,7 +1,6 @@
 const express = require('express')
 const app = express();
 const port = 9103;
-//const bodyparser = require('body-parser');
 var path = require('path');
 const bp = require('body-parser')
 app.use(bp.json())
@@ -15,9 +14,6 @@ process.on('uncaughtException', function (err) {
   }
 });
 */
-
-//middlewares
-//app.use(bodyParser.json());
 
 //initialize port for node application to run
 app.listen(port, () => {
