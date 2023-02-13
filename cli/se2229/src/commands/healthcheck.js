@@ -15,7 +15,7 @@ class HealthCheck extends Command {
       const {flags} = this.parse(HealthCheck)
       let status
       if (flags.format === 'csv') {
-        status = await axios.get(`${config.BASE_URL}/admin/healthcheck/csv`)
+        status = await axios.get(`${config.BASE_URL}/admin/healthcheck?format=csv`)
       } else {
         status = await axios.get(`${config.BASE_URL}/admin/healthcheck`)
       }
