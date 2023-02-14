@@ -11,7 +11,6 @@ class doanswer extends Command {
     try {
       const { flags } = this.parse(doanswer)
       await axios.post(`${config.BASE_URL}/doanswer/${flags.questionnaire_id}/${flags.question_id}/${flags.session}/${flags.option_id}`)
-      await axios.post(`${config.BASE_URL}/doanswer/${flags.questionnaire_id}/${flags.question_id}/${flags.session}/${flags.option_id}`)
       console.log('Answer Submitted')
     } catch (error) {
       console.error(chalk.red(error))
