@@ -140,3 +140,11 @@ button:hover{
   .label{
     font-weight: bold;
 }
+
+.error{
+    padding: 2rem;
+    font-weight: bold;
+    color: red;
+    position: bottom;
+}
+

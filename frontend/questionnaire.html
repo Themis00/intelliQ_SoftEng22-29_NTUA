@@ -6,18 +6,27 @@
     </head>
     <body>
         <div class="banner">
-        </div>
-        <div class="box">
-            <div style="padding: 2rem;" class="question" data-id="">
+            <div class="box">
+                <div style="padding: 2rem;" class="question" data-id="">
+                </div>
+            </div>
+            <div id="disp" class="error" data-id="">
             </div>
         </div>
         <script>
+            var questionmorph = [];
+            var question;
+            var id = 'P00';
+            var i = 0;
+            var nextquestionID;
+            var isRequired;
+            var error = 0;
+            var choices;
+            var apantisi;
+            var currentquestionID;
+            var optionID;
             $( document ).ready(function() {
-                var questionmorph = [];
-                var counter = 0;
-                var question;
-                var id = 'Q01';
-                var i = 0;
+                
                 $.ajax({
                     type:"GET",
                     url:'http://localhost:9103/intelliq_api/question/QQ000/'+id+'',
@@ -25,74 +34,139 @@
                     success: function(data2){
                         if(data2){
                             question = data2.qtext;
+                            currentquestionID = data2.qID;
+                            console.log(currentquestionID);
                             questionmorph = data2.options;
-                            console.log(questionmorph.length);
-                            var choices = questionmorph.length;
-                            var answer = questionmorph[0].nextqID;
-                            console.log(answer);
-                            var isRequired = data2.required === 'TRUE';
+                            choices = questionmorph.length;
+                            isRequired = data2.required === 'TRUE';
                             var isRequiredHTML = '';
                             if(isRequired){
                                 isRequiredHTML = 'required';
                             }
                             var questiontype = questionmorph[0].optID;
                             if(questiontype.includes("TXT")){
-                                var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' class="pedio"></input><button onclick="sendAnswer('+answer+')" class="submit">Υποβολή</button></div>';
+                                nextquestionID = questionmorph[0].nextqID;
+                                var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
                             } else{
                                 var html = '<h1>'+question+'</h1>';
                                 while(i < choices){
-                                    html += '<div style="margin: 2rem;"><input class="input" type="radio" id="option1" name="option"><label class="label" for="option1" id="label1">'+questionmorph[i].opttxt+'</label><br>';
+                                    html += '<div style="margin: 2rem;"><input class="input" type="radio" id="'+questionmorph[i].optID+'" name="option" value="'+questionmorph[i].opttxt+'"><label class="label" for="option1" id="label1">'+questionmorph[i].opttxt+'</label><br>';
                                         i++;
                                 }
-                                html += '<button onclick="sendAnswer('+answer+')" class="submit">Υποβολή</button></div>';
-                                /*if(questionmorph.length == 4){
-                                    var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input class="input" type="radio" id="option1" name="option"><label class="label" for="option1" id="label1">'+questionmorph[0].opttxt+'</label><br><input class="input" type="radio" id="option2" name="option"><label class="label" for="option2" id="label2">'+questionmorph[1].opttxt+'</label><br><input class="input" type="radio" id="option3" name="option"><label class="label" for="option3" id="label3">'+questionmorph[2].opttxt+'</label><br><input class="input" type="radio" id="option4" name="option"><label class="label" for="option4" id="label4">'+questionmorph[3].opttxt+'</label><br><button onclick="sendAnswer('+answer+')" class="submit">Υποβολή</button></div>';
-                                }*/
+                                i = 0;
+                                html += '<button onclick="checkifselected()" id="press" class="submit">Υποβολή</button></div>';
                             }
                             $('.question').html(html);
-                            /*
-                            $('.question').html(html);*/
-                            
-        
-                            
                         }
                     }
                 })
                 
             });
-    
-            function sendAnswer(answer){
-                var html = '<h1>'+answer+'</h1><div style="margin: 2rem;"></div>';
-                $('.question').html(html);
-                    /*counter += 2;
-    
-                    $.ajax({
-                    type:"GET",
-                    url:'http://localhost:9103/intelliq_api/questionnaire/QQ000',
-                    crossDomain:true,
-                    success: function(data2){
-                        if(data2){
-                            questions = data2.questions;
-                            var isRequired = questions[counter].required === 'TRUE';
-                            var isRequiredHTML = '';
-                            var questiontype = questions[counter].type === 'profile'; //lathos, theloyme to options toy getquestion === '<open string>'
-                            if(isRequired){
-                                isRequiredHTML = 'required';
-                            }
-                            if (questiontype){ //lathos, theloyme to options toy getquestion === '<open string>'
-                                var html = '<h1>'+questions[counter].qtext+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' type="email" class="pedio"></input><button onclick="sendAnswer(this)" class="submit">Υποβολή</button></div>';
-                            } else {
-                                var html = '<h1>'+questions[counter].qtext+'</h1><div style="margin: 2rem;"><input type="radio" name="fav_color" value="Red">Red<br><input type="radio" name="fav_color" value="Blue" checked>Blue<br><input type="radio" name="fav_color" value="Yellow">Yellow<br><button onclick="sendAnswer(this)" class="submit">Υποβολή</button></div>';
-                            }
-                            $('.question').data('id',questions[counter].qID);
-                            $('.question').html(html);
-                            
-        
-                            
-                        }
+
+            function checkiffilled(){
+                apantisi = document.getElementById(questionmorph[0].optID).value;
+                if (apantisi === "") {
+                    document.getElementById("disp").innerHTML
+                            = " field not filled";
+                } else {
+                    document.getElementById("disp").innerHTML
+                                = "";
+                    optionID = questionmorph[0].optID;
+                    //saveanswer(apantisi, optionID)
+                    nextquestion(nextquestionID);
+                }
+            }
+
+            function checkifselected() {
+                nextquestionID = questionmorph[0].nextqID;
+                error = 0;
+                for(var j=0; j<choices; j++){
+                    if(document.getElementById(questionmorph[j].optID).checked) {
+                        nextquestionID = questionmorph[j].nextqID;
+                        apantisi = questionmorph[j].opttxt;
+                        optionID = questionmorph[j].optID;
+                        document.getElementById("disp").innerHTML
+                                = ""; 
+                        break;
+                    }else{
+                        error += 1;
                     }
-                })*/
+                }
+                if(error == choices){
+                    if(isRequired){
+                        document.getElementById("disp").innerHTML
+                            = " radio button not checked"; 
+                    }else {
+                        optionID = null;
+                        //savechoice(apantisi, optionID);
+                        nextquestion(nextquestionID);
+                    }
+                }else{
+                    //savechoice(apantisi, optionID);
+                    nextquestion(nextquestionID);
+                }
+            }
+
+            function savechoice(answer, optionID){
+                $.ajax({
+                        type:"POST",
+                        url:'http://localhost:9103/intelliq_api/doanswer/QQ000/'+currentquestionID+'/1111/'+optionID+'',
+                        crossDomain:true,  
+                    });
+            }
+
+            function saveanswer(answer, optionID){
+                $.ajax({
+                        type:"POST",
+                        url:'http://localhost:9103/intelliq_api/doanswer/QQ000/'+currentquestionID+'/1111/'+optionID+'',
+                        crossDomain:true,  
+                    });
+            }
     
+            function nextquestion(currentquestionID){
+                if (currentquestionID == null){
+                    var html = '<h1>Τελος ερωτηματολογίου.</h1>';
+                    $('.question').html(html);
+                }else{
+                    $.ajax({
+                        type:"GET",
+                        url:'http://localhost:9103/intelliq_api/question/QQ000/'+currentquestionID+'',
+                        crossDomain:true,
+                        success: function(data2){
+                            if(data2){
+                                question = data2.qtext;
+                                currentquestionID = data2.qID;
+                                console.log(currentquestionID);
+                                questionmorph = data2.options;
+                                choices = questionmorph.length;
+                                isRequired = data2.required === 'TRUE';
+                                console.log(isRequired);
+                                var isRequiredHTML = '';
+                                if(isRequired){
+                                    isRequiredHTML = 'required';
+                                }
+                                var questiontype = questionmorph[0].optID;
+                                if(questiontype.includes("TXT")){
+                                    nextquestionID = questionmorph[0].nextqID;
+                                    var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
+                                } else{
+                                    var html = '<h1>'+question+'</h1>';
+                                    while(i < choices){
+                                        html += '<div style="margin: 2rem;"><input class="input" type="radio" id="'+questionmorph[i].optID+'" name="option" value="'+questionmorph[i].opttxt+'"><label class="label" for="option1" id="label1">'+questionmorph[i].opttxt+'</label><br>';
+                                            i++;                              
+                                    }
+                                    i = 0;
+                                    html += '<button onclick="checkifselected()" class="submit">Υποβολή</button></div>';
+                                }
+                                
+                                $('.question').html(html);
+                            }
+                        }
+                    })
+                }
+            }
+
+            
                 
                     /*currentAnswer
                     currentResponse
@@ -105,7 +179,7 @@
                     questions[counter].type === 'profile'
                     an oxi */
     
-                }
+                
         </script>
     </body>
     

@@ -3,6 +3,8 @@ const app = express();
 const port = 9103;
 var path = require('path');
 const bp = require('body-parser')
+var cors = require('cors')
+
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
@@ -24,6 +26,21 @@ app.listen(port, () => {
 app.get('/', (req, res) => {
   //res.sendFile(path.join(__dirname + '/index.html'));
 });
+
+const corsOpts = {
+  origin: '*',
+
+  methods: [
+    'GET',
+    'POST',
+  ],
+
+  allowedHeaders: [
+    'Content-Type',
+  ],
+};
+
+app.use(cors(corsOpts));
 
 // Admin Endpoints
 const healthcheck = require("./admin/healthcheck.js");
