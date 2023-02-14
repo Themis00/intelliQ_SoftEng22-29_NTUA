@@ -7,11 +7,15 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
-const {WrongEntryError, NoDataError} = require(path.resolve("customErrors.js")); 
+const {WrongEntryError, NoDataError, FormatQueryParamError} = require(path.resolve("customErrors.js")); 
 
 async function resetqRequest(req,res){
 
     try{
+
+        if(req.query.format && req.query.format != "json" && req.query.format != "csv"){
+            throw(new FormatQueryParamError('Not valid "format" parameter. Try "json", "csv" or nothing.'));
+        }
         
         const pool = require(path.resolve("db_connection/getPool.js"));
         
@@ -92,21 +96,49 @@ async function resetqRequest(req,res){
             throw err;  
         });
       
-        res.status(200).send({"status":"OK"});
+        if(req.query.format == "csv"){
+            res.status(200).send([["status"],["OK"]]);
+        }
+        else{
+            res.status(200).send({"status":"OK"});
+        }
 
     }
     catch(err){
-        if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
-            res.status(500).send({"status":"failed","reason":"No connection to database"});
+        if(err instanceof FormatQueryParamError){
+            res.status(400).send(err);
+        }
+        else if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
+            if(req.query.format == "csv"){
+                res.status(500).send([["name","message"],["DbConnectionError","No connection to database"]]);
+            }
+            else{
+                res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
+            }
         }
         else if(err instanceof WrongEntryError){
-            res.status(400).send({"status":"failed","reason":err.message});
+            if(req.query.format == "csv"){
+                res.status(400).send([["status","reason"],["failed",err.message]]);
+            }
+            else{
+                res.status(400).send({"status":"failed","reason":err.message});
+            }
         }
         else if(err instanceof NoDataError){
-            res.status(404).send({"status":"failed","reason":err.message});
+            if(req.query.format == "csv"){
+                res.status(404).send([["status","reason"],["failed",err.message]]);
+            }
+            else{
+                res.status(404).send({"status":"failed","reason":err.message});
+            }
         }
         else{ // For any other error
-            res.status(500).send({"status":"failed","reason":err.text});
+            if(req.query.format == "csv"){
+                res.status(500).send([["status","reason"],["failed",err.name]]);
+            }
+            else{
+                res.status(500).send({"status":"failed","reason":err.name});
+            }
         }
     }
 

@@ -10,11 +10,15 @@ const multer  = require('multer')
 const storage = multer.memoryStorage()
 const upload = multer({storage: storage}).single('questionnaire')
 
-const {WrongEntryError} = require(path.resolve("customErrors.js"));
+const {WrongEntryError,FormatQueryParamError} = require(path.resolve("customErrors.js"));
 
 async function questionnaire_update(req,res){
    
     try{
+
+        if(req.query.format && req.query.format != "json" && req.query.format != "csv"){
+            throw(new FormatQueryParamError('Not valid "format" parameter. Try "json", "csv" or nothing.'));
+        }
 
         await new Promise((resolve,reject) => upload(req,res,async function(err){
             
@@ -505,22 +509,50 @@ async function questionnaire_update(req,res){
         return;
         }))
         console.log("ok");
-        res.status(200).send({"status":"Success"}); 
+        if(req.query.format == "csv"){
+            res.status(200).send([["status"],["Success"]]);
+        }
+        else{
+            res.status(200).send({"status":"Success"});
+        }
         
     }
     catch(err){
         console.log("catch_err_2");
-        if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
-            res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
-        }
-        else if(err instanceof SyntaxError || err instanceof multer.MulterError){
-            res.status(400).send({"name":err.name,"message":err.message});
-        }
-        else if(err instanceof WrongEntryError){
+        if(err instanceof FormatQueryParamError){
             res.status(400).send(err);
         }
-        else if(err instanceof mariadb.SqlError){
-            res.status(400).send({"name":err.name,"code":err.code,"message":err.text}); // For any other sql error
+        else if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
+            if(req.query.format == "csv"){
+                res.status(500).send([["name","message"],["DbConnectionError","No connection to database"]]);
+            }
+            else{
+                res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
+            }
+        }
+        else if(err instanceof SyntaxError || err instanceof multer.MulterError){
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","message"],[err.name,err.message]]);
+            }
+            else{
+                res.status(400).send({"name":err.name,"message":err.message});
+            }
+        }
+        else if(err instanceof WrongEntryError){
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","message"],[err.name,err.message]]);
+            }
+            else{
+                res.status(400).send(err);
+            }
+        }
+        else if(err instanceof mariadb.SqlError){ // For any other sql error
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","code","message"],[err.name,err.code,err.text]]);
+            }
+            else{
+                res.status(400).send({"name":err.name,"code":err.code,"message":err.text});
+            }
         }
         else{ // For any other error
             res.status(500).send(err);

@@ -14,7 +14,16 @@ function healthcheckRequest(req,res){
         try{
             if (err) throw err;
             console.log("Connected to db");
-            res.status(200).send({"status":"OK"});
+            if(req.query.format == "csv"){
+                res.status(200).send([["status"],["OK"]]);
+            }
+            else if(!req.query.format || req.query.format == "json"){
+                res.status(200).send({"status":"OK"});
+            }
+            else{
+                res.status(400).send({"name":"FormatQueryParamError","message":"Not valid \"format\" parameter. Try \"json\", \"csv\" or nothing."});
+            }
+            
             connection.release();
             console.log("Disconnected from db");
         }

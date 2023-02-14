@@ -8,11 +8,15 @@ const router = express.Router();
 var mariadb = require('mariadb/callback');
 var path = require('path');
 
-const {WrongEntryError} = require(path.resolve("customErrors.js"));
+const {WrongEntryError,FormatQueryParamError} = require(path.resolve("customErrors.js"));
 
 async function insertanswer(req,res){
     
     try{
+
+        if(req.query.format && req.query.format != "json" && req.query.format != "csv"){
+            throw(new FormatQueryParamError('Not valid "format" parameter. Try "json", "csv" or nothing.'));
+        }
         
         const pool = require(path.resolve("db_connection/getPool.js"));
         
@@ -203,17 +207,40 @@ async function insertanswer(req,res){
     }
 
     catch(err){
-        if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
-            res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
-        }
-        else if(err.code == "ER_DUP_ENTRY"){
-            res.status(400).send({"name":"DuplicateEntry","message":"This question has already been answered in this session"});
-        }
-        else if(err instanceof WrongEntryError){
+        if(err instanceof FormatQueryParamError){
             res.status(400).send(err);
         }
-        else if(err instanceof mariadb.SqlError){
-            res.status(400).send({"name":err.name,"code":err.code,"message":err.text}); // For any other sql error
+        else if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
+            if(req.query.format == "csv"){
+                res.status(500).send([["name","message"],["DbConnectionError","No connection to database"]]);
+            }
+            else{
+                res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
+            }
+        }
+        else if(err.code == "ER_DUP_ENTRY"){
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","message"],["DuplicateEntry","This question has already been answered in this session"]]);
+            }
+            else{
+                res.status(400).send({"name":"DuplicateEntry","message":"This question has already been answered in this session"});
+            }
+        }
+        else if(err instanceof WrongEntryError){
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","message"],[err.name,err.message]]);
+            }
+            else{
+                res.status(400).send(err);
+            }
+        }
+        else if(err instanceof mariadb.SqlError){ // For any other sql error
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","code","message"],[err.name,err.code,err.text]]);
+            }
+            else{
+                res.status(400).send({"name":err.name,"code":err.code,"message":err.text});
+            }
         }
         else{ // For any other error
             res.status(500).send(err);
