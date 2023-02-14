@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>Questionnaire</title>
+        <link rel="stylesheet" href="participantstyle.css">
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="banner">
+            
+        </div>
+        <div class="content">
+            <div  class="questionnaire" data-id="">
+                <h1></h1>
+            </div>
+            <p>Press the button to start the Questionnaire</p>
+            <div>
+            <button type="button"><span></span><a href="questionnaire.html"> START!</a></button>
+            </div>
+        </div>
+    </body>
+    <script>
+        $( document ).ready(function() {
+            var questionnairekeywords = [];
+            var counter = 0;
+            var Title;
+            $.ajax({
+                type:"GET",
+                url:'http://localhost:9103/intelliq_api/questionnaire/QQ000',
+                crossDomain:true,
+                success: function(data2){
+                    if(data2){
+                        questionnairekeywords = data2.keywords;
+                        console.log(questionnairekeywords);
+                        Title = data2.questionnaireTitle;
+                        console.log(Title);
+                        var html = '<h1>'+Title+'</h1><div style="margin: 2rem;"><h2>'+questionnairekeywords+'</div>';
+                        $('.questionnaire').html(html);
+                    }
+                }
+            })
+        });
+    </script>
+</html>

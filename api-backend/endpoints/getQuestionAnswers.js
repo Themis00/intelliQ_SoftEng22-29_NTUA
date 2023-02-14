@@ -11,10 +11,15 @@ var path = require('path');
 const converter = require('json-2-csv');
 const CSV = require('csv-string');
 
-const {WrongEntryError,NoDataError} = require(path.resolve("customErrors.js")); 
+const {WrongEntryError,NoDataError,FormatQueryParamError} = require(path.resolve("customErrors.js")); 
 
 async function getQuestionAnswersRequest(req,res){
+    
     try{
+
+        if(req.query.format && req.query.format != "json" && req.query.format != "csv"){
+            throw(new FormatQueryParamError('Not valid "format" parameter. Try "json", "csv" or nothing.'));
+        }
 
         const pool = require(path.resolve("db_connection/getPool.js"));
         let json_str1 = await new Promise((resolve,reject) => pool.getConnection(async function(err,connection) {
@@ -82,29 +87,66 @@ async function getQuestionAnswersRequest(req,res){
             throw err;  
         });
       
-        if(!req.query.format || req.query.format == "json"){
-            res.status(200).send(JSON.parse(json_str1));
-        }
-        else if(req.query.format == "csv"){
-            let csv = await converter.json2csvAsync(JSON.parse(json_str1)).catch(function(err){throw err;});
+        if(req.query.format == "csv"){
+
+            let json = await JSON.parse(json_str1);
+            let csv = await converter.json2csvAsync(json).catch(function(err){throw err;});
             let arr = CSV.parse(csv);
+
+            let ans_csvs = [];
+            let ans_csv; 
+            let ans_arr;
+            for(let i=0; i<json["answers"].length; i++){
+                ans_csv = await converter.json2csvAsync(json["answers"][i]).catch(function(err){throw err;});
+                ans_arr = CSV.parse(ans_csv);
+                ans_csvs.push(ans_arr);
+            }
+
+            arr[1][2] = ans_csvs;
+
             res.status(200).send(arr);
         }
-        else throw(new WrongEntryError("Not valid \"format\" parameter. Try \"json\", \"csv\" or nothing."));
+        else{
+            res.status(200).send(JSON.parse(json_str1));
+        }
+        
     }
 
     catch(err){
-        if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
-            res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
-        }
-        else if(err instanceof WrongEntryError){ // Wrong parameters
+        if(err instanceof FormatQueryParamError){
             res.status(400).send(err);
         }
-        else if(err instanceof NoDataError){ // No answer inserts
-            res.status(404).send(err);
+        else if(err.code == "ER_GET_CONNECTION_TIMEOUT"){
+            if(req.query.format == "csv"){
+                res.status(500).send([["name","message"],["DbConnectionError","No connection to database"]]);
+            }
+            else{
+                res.status(500).send({"name":"DbConnectionError","message":"No connection to database"});
+            }
         }
-        else if(err instanceof mariadb.SqlError){
-            res.status(400).send({"name":err.name,"code":err.code,"message":err.text}); // For any other sql error
+        else if(err instanceof WrongEntryError){ // Wrong parameters
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","message"],[err.name,err.message]]);
+            }
+            else{
+                res.status(400).send(err);
+            }
+        }
+        else if(err instanceof NoDataError){ // No answer inserts
+            if(req.query.format == "csv"){
+                res.status(404).send([["name","message"],[err.name,err.message]]);
+            }
+            else{
+                res.status(404).send(err);
+            }
+        }
+        else if(err instanceof mariadb.SqlError){ // For any other sql error
+            if(req.query.format == "csv"){
+                res.status(400).send([["name","code","message"],[err.name,err.code,err.text]]);
+            }
+            else{
+                res.status(400).send({"name":err.name,"code":err.code,"message":err.text});
+            }
         }
         else{ // For any other error
             res.status(500).send(err);

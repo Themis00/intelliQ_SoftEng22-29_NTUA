@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <title>Questionnaire</title>
+        <link rel="stylesheet" href="participantstyle.css">
+        <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <div class="banner">
+        </div>
+        <div class="box">
+            <div style="padding: 2rem;" class="question" data-id="">
+            </div>
+        </div>
+        <script>
+            $( document ).ready(function() {
+                var questionmorph = [];
+                var counter = 0;
+                var question;
+                var id = 'Q01';
+                var i = 0;
+                $.ajax({
+                    type:"GET",
+                    url:'http://localhost:9103/intelliq_api/question/QQ000/'+id+'',
+                    crossDomain:true,
+                    success: function(data2){
+                        if(data2){
+                            question = data2.qtext;
+                            questionmorph = data2.options;
+                            console.log(questionmorph.length);
+                            var choices = questionmorph.length;
+                            var answer = questionmorph[0].nextqID;
+                            console.log(answer);
+                            var isRequired = data2.required === 'TRUE';
+                            var isRequiredHTML = '';
+                            if(isRequired){
+                                isRequiredHTML = 'required';
+                            }
+                            var questiontype = questionmorph[0].optID;
+                            if(questiontype.includes("TXT")){
+                                var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' class="pedio"></input><button onclick="sendAnswer('+answer+')" class="submit">Υποβολή</button></div>';
+                            } else{
+                                var html = '<h1>'+question+'</h1>';
+                                while(i < choices){
+                                    html += '<div style="margin: 2rem;"><input class="input" type="radio" id="option1" name="option"><label class="label" for="option1" id="label1">'+questionmorph[i].opttxt+'</label><br>';
+                                        i++;
+                                }
+                                html += '<button onclick="sendAnswer('+answer+')" class="submit">Υποβολή</button></div>';
+                                /*if(questionmorph.length == 4){
+                                    var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input class="input" type="radio" id="option1" name="option"><label class="label" for="option1" id="label1">'+questionmorph[0].opttxt+'</label><br><input class="input" type="radio" id="option2" name="option"><label class="label" for="option2" id="label2">'+questionmorph[1].opttxt+'</label><br><input class="input" type="radio" id="option3" name="option"><label class="label" for="option3" id="label3">'+questionmorph[2].opttxt+'</label><br><input class="input" type="radio" id="option4" name="option"><label class="label" for="option4" id="label4">'+questionmorph[3].opttxt+'</label><br><button onclick="sendAnswer('+answer+')" class="submit">Υποβολή</button></div>';
+                                }*/
+                            }
+                            $('.question').html(html);
+                            /*
+                            $('.question').html(html);*/
+                            
+        
+                            
+                        }
+                    }
+                })
+                
+            });
+    
+            function sendAnswer(answer){
+                var html = '<h1>'+answer+'</h1><div style="margin: 2rem;"></div>';
+                $('.question').html(html);
+                    /*counter += 2;
+    
+                    $.ajax({
+                    type:"GET",
+                    url:'http://localhost:9103/intelliq_api/questionnaire/QQ000',
+                    crossDomain:true,
+                    success: function(data2){
+                        if(data2){
+                            questions = data2.questions;
+                            var isRequired = questions[counter].required === 'TRUE';
+                            var isRequiredHTML = '';
+                            var questiontype = questions[counter].type === 'profile'; //lathos, theloyme to options toy getquestion === '<open string>'
+                            if(isRequired){
+                                isRequiredHTML = 'required';
+                            }
+                            if (questiontype){ //lathos, theloyme to options toy getquestion === '<open string>'
+                                var html = '<h1>'+questions[counter].qtext+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' type="email" class="pedio"></input><button onclick="sendAnswer(this)" class="submit">Υποβολή</button></div>';
+                            } else {
+                                var html = '<h1>'+questions[counter].qtext+'</h1><div style="margin: 2rem;"><input type="radio" name="fav_color" value="Red">Red<br><input type="radio" name="fav_color" value="Blue" checked>Blue<br><input type="radio" name="fav_color" value="Yellow">Yellow<br><button onclick="sendAnswer(this)" class="submit">Υποβολή</button></div>';
+                            }
+                            $('.question').data('id',questions[counter].qID);
+                            $('.question').html(html);
+                            
+        
+                            
+                        }
+                    }
+                })*/
+    
+                
+                    /*currentAnswer
+                    currentResponse
+                    $.ajax({
+                        type:"POST",
+                        url:'http://localhost:9103/intelliq_api/doanswer/QQ000/Q06/1111/Q06A1',
+                        crossDomain:true,  
+                    });
+                    counter++;
+                    questions[counter].type === 'profile'
+                    an oxi */
+    
+                }
+        </script>
+    </body>
+    
+</html>
