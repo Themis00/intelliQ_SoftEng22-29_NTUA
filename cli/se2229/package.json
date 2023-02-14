@@ -1,15 +1,15 @@
 {
   "name": "se2229",
   "version": "0.0.0",
-  "description": "command line interface se2229",
+  "description": "command line interface team 29",
   "author": "team29",
   "bin": {
     "se2229": "./bin/run"
   },
-  "homepage": "https://github.com/cli/cli",
+  "homepage": "https://github.com/cli/se2229",
   "license": "MIT",
   "main": "dist/index.js",
-  "repository": "cli/cli",
+  "repository": "cli/se2229",
   "files": [
     "/bin",
     "/dist",
@@ -19,7 +19,10 @@
   "dependencies": {
     "@oclif/core": "^2",
     "@oclif/plugin-help": "^5",
-    "@oclif/plugin-plugins": "^2.3.0"
+    "@oclif/plugin-plugins": "^2.3.0",
+    "axios": "^1.3.3",
+    "chalk": "^5.2.0",
+    "https": "^1.0.0"
   },
   "devDependencies": {
     "@oclif/test": "^2.3.5",
@@ -64,7 +67,7 @@
   "engines": {
     "node": ">=12.0.0"
   },
-  "bugs": "https://github.com/cli/cli/issues",
+  "bugs": "https://github.com/cli/se2229/issues",
   "keywords": [
     "oclif"
   ],
