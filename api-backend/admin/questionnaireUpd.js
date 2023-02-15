@@ -64,7 +64,8 @@ async function questionnaire_update(req,res){
                 
                 console.log("Connected to db");
                 
-                // Insert questionnaire data-----------------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------------------------------------------
+                // Insert questionnaire data
                 let questionnaireID = body.questionnaireID;
                 let questionnaireTitle = body.questionnaireTitle;
 
@@ -251,6 +252,11 @@ async function questionnaire_update(req,res){
                                     questionErrorFlag = 1;
                                     break;
                                 }
+                                else if(questionsList[0]["qID"] > questionsList[i]["qID"]){
+                                    errorMessage = "The qID of the first question must be < than the qID of any other question in order to be indicated as first. It is strongly recommended tho that all the questions' qIDs are in increasing order.";
+                                    questionErrorFlag = 1;
+                                    break;
+                                }
                                 else if(questionsList[i]["qtext"].length == 0){
                                     errorMessage = "Question text length can't be 0.";
                                     questionErrorFlag = 1;
@@ -261,8 +267,8 @@ async function questionnaire_update(req,res){
                                     questionErrorFlag = 1;
                                     break;
                                 }
-                                else if(questionsList[i]["type"] != "profile" && questionsList[i]["type"]!= "question"){
-                                    errorMessage = "Type value must be \"profile\" or \"question\"";
+                                else if(questionsList[i]["type"] != "profile" && questionsList[i]["type"]!= "question" && questionsList[i]["type"]!= "feedback"){
+                                    errorMessage = "Type value must be \"profile\" or \"question\" or \"feedback\"";
                                     questionErrorFlag = 1;
                                     break;
                                 }
@@ -382,11 +388,16 @@ async function questionnaire_update(req,res){
                                             optionErrorFlag = 1;
                                             break;
                                         }
+                                        else if(questionsList[i]["required"] == "FALSE" && optionList[j]["nextqID"] != optionList[0]["nextqID"]){
+                                            errorMessage = "In a non-required question, all the answers must have the same next question.";
+                                            optionErrorFlag = 1;
+                                            break;
+                                        }
                                         else{
                                             // Find if the nextqID of the current option addresses to a previous question, in order to reject error
                                             qIDFound = await new Promise((resolve) => resolve(questionsList.slice(0,i).find(question => question.qID == optionList[j]["nextqID"])));
                                             if(qIDFound != null){
-                                                errorMessage = "The nextqID cannot address to a previous question. It can only be the qID of a following question or \"-\"";
+                                                errorMessage = "The nextqID cannot address to a previous question. It can only be the qID of a following question or \"-\".";
                                                 optionErrorFlag = 1;
                                                 break;
                                             }
@@ -540,10 +551,10 @@ async function questionnaire_update(req,res){
         }
         else if(err instanceof WrongEntryError){
             if(req.query.format == "csv"){
-                res.status(400).send([["name","message"],[err.name,err.message]]);
+                res.status(400).send([["name","message"],[err.name,err.message + " Please check the questionnaire_update_instructions text file."]]);
             }
             else{
-                res.status(400).send(err);
+                res.status(400).send({"name":err.name,"message":err.message + " Please check the questionnaire_update_instructions text file."});
             }
         }
         else if(err instanceof mariadb.SqlError){ // For any other sql error
