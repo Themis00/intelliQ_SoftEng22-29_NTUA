@@ -1,6 +1,5 @@
 import { Command, Flags } from '@oclif/core';
 import axios from 'axios';
-import chalk from 'chalk';
 
 export default class Healthcheck extends Command {
   static description = 'tests live server for errors';
