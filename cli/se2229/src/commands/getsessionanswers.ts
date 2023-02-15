@@ -15,7 +15,7 @@ export default class getsessionanswers extends Command {
       required: true,
       description: 'choose the questionnaire whose getsessionanswers will be returned'
     }),
-    session: Flags.string({
+    session_id: Flags.string({
       required: true,
       description: 'choose the session whose answers will be returned'
     }),
@@ -27,10 +27,10 @@ export default class getsessionanswers extends Command {
     try {
       const { flags } = await this.parse(getsessionanswers);
       if (flags.format === 'csv') {
-        const response = await axios.get(`http://localhost:9103/intelliq_api/getsessionanswers/${flags.questionnaire_id}/${flags.session}?format=csv`);
+        const response = await axios.get(`http://localhost:9103/intelliq_api/getsessionanswers/${flags.questionnaire_id}/${flags.session_id}?format=csv`);
         data = response.data;
       } else {
-        const response = await axios.get(`http://localhost:9103/intelliq_api/getsessionanswers/${flags.questionnaire_id}/${flags.session}`);
+        const response = await axios.get(`http://localhost:9103/intelliq_api/getsessionanswers/${flags.questionnaire_id}/${flags.session_id}`);
         data = response.data;
       }
       console.log(data);
