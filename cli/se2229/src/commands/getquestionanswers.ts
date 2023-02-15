@@ -1,8 +1,8 @@
 import { Command, Flags } from '@oclif/core';
 import axios from 'axios';
 
-export default class question extends Command {
-  static description = 'returns an object that includes the question info and options of a specific question of a specific questionnaire';
+export default class getquestionanswers extends Command {
+  static description = 'returns an object that includes all the answers (for all sessions) in a specific question of a specific questionnaire';
 
   static flags = {
     // flag with a value (-n, --name=VALUE)
@@ -13,7 +13,7 @@ export default class question extends Command {
     }),
     questionnaire_id: Flags.string({
       required: true,
-      description: 'choose the questionnaire whose question will be returned'
+      description: 'choose the questionnaire whose getquestionanswers will be returned'
     }),
     question_id: Flags.string({
       required: true,
@@ -25,12 +25,12 @@ export default class question extends Command {
     let data: any; // type annotation to specify the type of the variable
 
     try {
-      const { flags } = await this.parse(question);
+      const { flags } = await this.parse(getquestionanswers);
       if (flags.format === 'csv') {
-        const response = await axios.get(`http://localhost:9103/intelliq_api/question/${flags.questionnaire_id}/${flags.question_id}?format=csv`);
+        const response = await axios.get(`http://localhost:9103/intelliq_api/getquestionanswers/${flags.questionnaire_id}/${flags.question_id}?format=csv`);
         data = response.data;
       } else {
-        const response = await axios.get(`http://localhost:9103/intelliq_api/question/${flags.questionnaire_id}/${flags.question_id}`);
+        const response = await axios.get(`http://localhost:9103/intelliq_api/getquestionanswers/${flags.questionnaire_id}/${flags.question_id}`);
         data = response.data;
       }
       console.log(data);
