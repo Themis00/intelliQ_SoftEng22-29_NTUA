@@ -7,7 +7,7 @@
     <body>
         <div class="banner">
             <div class="box">
-                <div style="padding: 2rem;" class="question" data-id="">
+                <div style="padding: 1rem;" class="question" data-id="">
                 </div>
             </div>
             <div id="disp" class="error" data-id="">
@@ -35,20 +35,27 @@
                         if(data2){
                             question = data2.qtext;
                             currentquestionID = data2.qID;
-                            console.log(currentquestionID);
                             questionmorph = data2.options;
                             choices = questionmorph.length;
                             isRequired = data2.required === 'TRUE';
                             var isRequiredHTML = '';
                             if(isRequired){
                                 isRequiredHTML = 'required';
+
                             }
                             var questiontype = questionmorph[0].optID;
                             if(questiontype.includes("TXT")){
                                 nextquestionID = questionmorph[0].nextqID;
-                                var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
+                                var html = '<h1>'+question+'</h1>';
+                                    if(isRequired){
+                                        html += '<h3 class="error">*required field*</h3>';
+                                    }
+                                    html += '<div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
                             } else{
                                 var html = '<h1>'+question+'</h1>';
+                                if(isRequired){
+                                html += '<h3 class="error">*required choice*</h3>';
+                            }
                                 while(i < choices){
                                     html += '<div style="margin: 2rem;"><input class="input" type="radio" id="'+questionmorph[i].optID+'" name="option" value="'+questionmorph[i].opttxt+'"><label class="label" for="option1" id="label1">'+questionmorph[i].opttxt+'</label><br>';
                                         i++;
@@ -65,16 +72,21 @@
 
             function checkiffilled(){
                 apantisi = document.getElementById(questionmorph[0].optID).value;
-                if (apantisi === "") {
-                    document.getElementById("disp").innerHTML
-                            = " field not filled";
-                } else {
-                    document.getElementById("disp").innerHTML
-                                = "";
-                    optionID = questionmorph[0].optID;
-                    //saveanswer(apantisi, optionID)
+                if(isRequired){
+                    if (apantisi === "") {
+                    } else {
+                    //optionID = questionmorph[0].optID;
+                    //saveanswer(apantisi)
+                    console.log(apantisi);
+                    nextquestion(nextquestionID);
+                    }
+                }else{
+                    //optionID = questionmorph[0].optID;
+                    //saveanswer(apantisi)
+                    console.log(apantisi);
                     nextquestion(nextquestionID);
                 }
+                
             }
 
             function checkifselected() {
@@ -83,10 +95,8 @@
                 for(var j=0; j<choices; j++){
                     if(document.getElementById(questionmorph[j].optID).checked) {
                         nextquestionID = questionmorph[j].nextqID;
-                        apantisi = questionmorph[j].opttxt;
+                        //apantisi = questionmorph[j].opttxt;
                         optionID = questionmorph[j].optID;
-                        document.getElementById("disp").innerHTML
-                                = ""; 
                         break;
                     }else{
                         error += 1;
@@ -94,15 +104,15 @@
                 }
                 if(error == choices){
                     if(isRequired){
-                        document.getElementById("disp").innerHTML
-                            = " radio button not checked"; 
                     }else {
                         optionID = null;
-                        //savechoice(apantisi, optionID);
+                        //savechoice(optionID);
+                        console.log(optionID);
                         nextquestion(nextquestionID);
                     }
                 }else{
-                    //savechoice(apantisi, optionID);
+                    //savechoice(optionID);
+                    console.log(optionID);
                     nextquestion(nextquestionID);
                 }
             }
@@ -136,11 +146,9 @@
                             if(data2){
                                 question = data2.qtext;
                                 currentquestionID = data2.qID;
-                                console.log(currentquestionID);
                                 questionmorph = data2.options;
                                 choices = questionmorph.length;
                                 isRequired = data2.required === 'TRUE';
-                                console.log(isRequired);
                                 var isRequiredHTML = '';
                                 if(isRequired){
                                     isRequiredHTML = 'required';
@@ -148,9 +156,16 @@
                                 var questiontype = questionmorph[0].optID;
                                 if(questiontype.includes("TXT")){
                                     nextquestionID = questionmorph[0].nextqID;
-                                    var html = '<h1>'+question+'</h1><div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
+                                    var html = '<h1>'+question+'</h1>';
+                                    if(isRequired){
+                                        html += '<h3 class="error">*required field*</h3>';
+                                    }
+                                    html += '<div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
                                 } else{
                                     var html = '<h1>'+question+'</h1>';
+                                    if(isRequired){
+                                        html += '<h3 class="error">*required choice*</h3>';
+                                    }
                                     while(i < choices){
                                         html += '<div style="margin: 2rem;"><input class="input" type="radio" id="'+questionmorph[i].optID+'" name="option" value="'+questionmorph[i].opttxt+'"><label class="label" for="option1" id="label1">'+questionmorph[i].opttxt+'</label><br>';
                                             i++;                              

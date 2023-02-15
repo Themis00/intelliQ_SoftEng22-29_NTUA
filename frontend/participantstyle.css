@@ -144,7 +144,12 @@ button:hover{
 .error{
     padding: 2rem;
     font-weight: bold;
+    font-size: 20px;
     color: red;
     position: bottom;
 }
 
+.question h1{
+    font-size: 50px;
+    font-weight: bold;
+}
