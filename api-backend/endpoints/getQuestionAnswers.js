@@ -13,6 +13,11 @@ const CSV = require('csv-string');
 
 const {WrongEntryError,NoDataError,FormatQueryParamError} = require(path.resolve("customErrors.js")); 
 
+async function renameKey ( obj, oldKey, newKey ) {
+    obj[newKey] = obj[oldKey];
+    delete obj[oldKey];
+  }
+
 async function getQuestionAnswersRequest(req,res){
     
     try{
@@ -35,7 +40,7 @@ async function getQuestionAnswersRequest(req,res){
                 "select session, ans_str from `answers` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"'"+ "and ans like '%TXT' order by ans_datetime desc;" +
                 "select session, ans from `answers` where questionnaireID =" + "'" + req.params.questionnaireID+"'"+ "and qID =" + "'" + req.params.questionID+"'"+ "and ans not like '%TXT' and ans is not null order by ans_datetime desc";
                 
-            await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
+            await new Promise((resolve,reject) => connection.query(myquery, async function (err, result, fields) {
 
                 if (err){
                     reject(err);
@@ -55,10 +60,11 @@ async function getQuestionAnswersRequest(req,res){
                 let temp1 = JSON.stringify(result[0][0]).slice(0,-1)
                 let temp2 = "";
                 if(result[1].length != 0){
-                    temp2 = JSON.stringify(result[1])
+                    await result[1].forEach( obj => renameKey( obj, 'ans_str', 'ans' ) );
+                    temp2 = JSON.stringify(result[1]);
                 }
                 else{
-                    temp2 = JSON.stringify(result[2])
+                    temp2 = JSON.stringify(result[2]);
                 }
                 let json_str_inner = temp1 + ",\"answers\":" + temp2 + "}";
                 //-----------------------------------------------------------------------------------------
