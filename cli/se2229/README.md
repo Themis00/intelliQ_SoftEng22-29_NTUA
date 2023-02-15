@@ -1,7 +1,7 @@
-oclif-hello-world
+se2229 CLI
 =================
 
-oclif example Hello World CLI
+Command Line Interface of team 29
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/oclif-hello-world.svg)](https://npmjs.org/package/oclif-hello-world)
@@ -13,13 +13,10 @@ oclif example Hello World CLI
 * [Usage](#usage)
 * [Commands](#commands)
 <!-- tocstop -->
-* [Usage](#usage)
-* [Commands](#commands)
-<!-- tocstop -->
 # Usage
 <!-- usage -->
 ```sh-session
-$ npm install -g se2229
+$ npx se2229
 $ se2229 COMMAND
 running command...
 $ se2229 (--version)
@@ -29,33 +26,20 @@ USAGE
   $ se2229 COMMAND
 ...
 ```
-<!-- usagestop -->
-```sh-session
-$ npm install -g oclif-hello-world
-$ oex COMMAND
-running command...
-$ oex (--version)
-oclif-hello-world/0.0.0 darwin-x64 node-v16.13.1
-$ oex --help [COMMAND]
-USAGE
-  $ oex COMMAND
-...
-```
+
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`se2229 hello PERSON`](#se2229-hello-person)
-* [`se2229 hello world`](#se2229-hello-world)
-* [`se2229 help [COMMANDS]`](#se2229-help-commands)
-* [`se2229 plugins`](#se2229-plugins)
-* [`se2229 plugins:install PLUGIN...`](#se2229-pluginsinstall-plugin)
-* [`se2229 plugins:inspect PLUGIN...`](#se2229-pluginsinspect-plugin)
-* [`se2229 plugins:install PLUGIN...`](#se2229-pluginsinstall-plugin-1)
-* [`se2229 plugins:link PLUGIN`](#se2229-pluginslink-plugin)
-* [`se2229 plugins:uninstall PLUGIN...`](#se2229-pluginsuninstall-plugin)
-* [`se2229 plugins:uninstall PLUGIN...`](#se2229-pluginsuninstall-plugin-1)
-* [`se2229 plugins:uninstall PLUGIN...`](#se2229-pluginsuninstall-plugin-2)
-* [`se2229 plugins update`](#se2229-plugins-update)
+* [`se2229 Healthcheck`](#se2229-healthcheck)
+* [`se2229 resetall`](#se2229-resetall)
+* [`se2229 resetq`](#se2229-resetq)
+* [`se2229 question`](#se2229-question)
+* [`se2229 questionnaire`](#se2229-questionnaire)
+* [`se2229 questionnaire_upd`](#se2229-questionnaire-upd)
+* [`se2229 doanswer`](#se2229-doanswer)
+* [`se2229 getquestionanswers`](#se2229-getquestionanswers)
+* [`se2229 getsessionanswers`](#se2229-getsessionanswers)
+
 
 ## `se2229 hello PERSON`
 

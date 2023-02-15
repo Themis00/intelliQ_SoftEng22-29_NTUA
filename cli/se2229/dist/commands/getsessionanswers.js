@@ -3,17 +3,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const core_1 = require("@oclif/core");
 const axios_1 = tslib_1.__importDefault(require("axios"));
-class question extends core_1.Command {
+class getsessionanswers extends core_1.Command {
     async run() {
         let data; // type annotation to specify the type of the variable
         try {
-            const { flags } = await this.parse(question);
+            const { flags } = await this.parse(getsessionanswers);
             if (flags.format === 'csv') {
-                const response = await axios_1.default.get(`http://localhost:9103/intelliq_api/question/${flags.questionnaire_id}/${flags.question_id}?format=csv`);
+                const response = await axios_1.default.get(`http://localhost:9103/intelliq_api/getsessionanswers/${flags.questionnaire_id}/${flags.session}?format=csv`);
                 data = response.data;
             }
             else {
-                const response = await axios_1.default.get(`http://localhost:9103/intelliq_api/question/${flags.questionnaire_id}/${flags.question_id}`);
+                const response = await axios_1.default.get(`http://localhost:9103/intelliq_api/getsessionanswers/${flags.questionnaire_id}/${flags.session}`);
                 data = response.data;
             }
             console.log(data);
@@ -23,9 +23,9 @@ class question extends core_1.Command {
         }
     }
 }
-exports.default = question;
-question.description = 'returns the question of given questionID and questionnaireID';
-question.flags = {
+exports.default = getsessionanswers;
+getsessionanswers.description = 'returns the answers of given questionnaireID and session';
+getsessionanswers.flags = {
     // flag with a value (-n, --name=VALUE)
     format: core_1.Flags.string({
         options: ['json', 'csv'],
@@ -34,10 +34,10 @@ question.flags = {
     }),
     questionnaire_id: core_1.Flags.string({
         required: true,
-        description: 'choose the questionnaire whose question will be returned'
+        description: 'choose the questionnaire whose getsessionanswers will be returned'
     }),
-    question_id: core_1.Flags.string({
+    session: core_1.Flags.string({
         required: true,
-        description: 'choose the question to be returned'
+        description: 'choose the session whose answers will be returned'
     }),
 };
