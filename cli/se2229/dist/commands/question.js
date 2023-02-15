@@ -24,7 +24,7 @@ class question extends core_1.Command {
     }
 }
 exports.default = question;
-question.description = 'returns the question of given questionID and questionnaireID';
+question.description = 'returns an object that includes the question info and options of a specific question of a specific questionnaire';
 question.flags = {
     // flag with a value (-n, --name=VALUE)
     format: core_1.Flags.string({

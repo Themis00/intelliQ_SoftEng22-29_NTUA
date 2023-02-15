@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
 const core_1 = require("@oclif/core");
-const axios_1 = require("axios");
+const axios_1 = tslib_1.__importDefault(require("axios"));
 class getquestionanswers extends core_1.Command {
     async run() {
         let data; // type annotation to specify the type of the variable
@@ -23,7 +24,7 @@ class getquestionanswers extends core_1.Command {
     }
 }
 exports.default = getquestionanswers;
-getquestionanswers.description = 'returns the answers of all sessions of the given questionID';
+getquestionanswers.description = 'returns an object that includes all the answers (for all sessions) in a specific question of a specific questionnaire';
 getquestionanswers.flags = {
     // flag with a value (-n, --name=VALUE)
     format: core_1.Flags.string({
@@ -37,6 +38,6 @@ getquestionanswers.flags = {
     }),
     question_id: core_1.Flags.string({
         required: true,
-        description: 'choose the getquestionanswers to be returned'
+        description: 'choose the question to be returned'
     }),
 };
