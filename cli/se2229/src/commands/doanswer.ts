@@ -18,7 +18,7 @@ export default class doanswer extends Command {
       required: true,
       description: 'choose the question to be returned'
      }),
-    session: Flags.string({
+    session_id: Flags.string({
       required: true,
       description: '4 random symbol string that correspond to the session'
     }),
@@ -34,7 +34,7 @@ export default class doanswer extends Command {
     try {
       const { flags } = await this.parse(doanswer);
      
-      const response = await axios.post(`http://localhost:9103/intelliq_api/doanswer/${flags.questionnaire_id}/${flags.question_id}/${flags.session}/${flags.option_id}`);
+      const response = await axios.post(`http://localhost:9103/intelliq_api/doanswer/${flags.questionnaire_id}/${flags.question_id}/${flags.session_id}/${flags.option_id}`);
       data = response.data;
       
       console.log('Answer Submitted');
