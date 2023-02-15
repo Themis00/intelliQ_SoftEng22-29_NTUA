@@ -16,7 +16,7 @@ Command Line Interface of team 29
 # Usage
 <!-- usage -->
 ```sh-session
-$ npx se2229
+$ npm install -g se2229
 $ se2229 COMMAND
 running command...
 $ se2229 (--version)
@@ -26,60 +26,109 @@ USAGE
   $ se2229 COMMAND
 ...
 ```
-
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`se2229 Healthcheck`](#se2229-healthcheck)
-* [`se2229 resetall`](#se2229-resetall)
-* [`se2229 resetq`](#se2229-resetq)
-* [`se2229 question`](#se2229-question)
-* [`se2229 questionnaire`](#se2229-questionnaire)
-* [`se2229 questionnaire_upd`](#se2229-questionnaire-upd)
 * [`se2229 doanswer`](#se2229-doanswer)
 * [`se2229 getquestionanswers`](#se2229-getquestionanswers)
 * [`se2229 getsessionanswers`](#se2229-getsessionanswers)
+* [`se2229 healthcheck`](#se2229-healthcheck)
+* [`se2229 help [COMMANDS]`](#se2229-help-commands)
+* [`se2229 plugins`](#se2229-plugins)
+* [`se2229 plugins:install PLUGIN...`](#se2229-pluginsinstall-plugin)
+* [`se2229 plugins:inspect PLUGIN...`](#se2229-pluginsinspect-plugin)
+* [`se2229 plugins:install PLUGIN...`](#se2229-pluginsinstall-plugin-1)
+* [`se2229 plugins:link PLUGIN`](#se2229-pluginslink-plugin)
+* [`se2229 plugins:uninstall PLUGIN...`](#se2229-pluginsuninstall-plugin)
+* [`se2229 plugins:uninstall PLUGIN...`](#se2229-pluginsuninstall-plugin-1)
+* [`se2229 plugins:uninstall PLUGIN...`](#se2229-pluginsuninstall-plugin-2)
+* [`se2229 plugins update`](#se2229-plugins-update)
+* [`se2229 question`](#se2229-question)
+* [`se2229 questionnaire`](#se2229-questionnaire)
+* [`se2229 questionnaire_upd`](#se2229-questionnaire_upd)
+* [`se2229 resetall`](#se2229-resetall)
+* [`se2229 resetq`](#se2229-resetq)
 
+## `se2229 doanswer`
 
-## `se2229 hello PERSON`
-
-Say hello
+Insert answer in the database
 
 ```
 USAGE
-  $ se2229 hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
+  $ se2229 doanswer --format json|csv --questionnaire_id <value> --question_id <value> --session <value>
+    --option_id <value>
 
 FLAGS
-  -f, --from=<value>  (required) Who is saying hello
+  --format=<option>           (required) [default: json]
+                              <options: json|csv>
+  --option_id=<value>         (required) the ID of the option selected for the answer
+  --question_id=<value>       (required) choose the question to be returned
+  --questionnaire_id=<value>  (required) choose the questionnaire whose question will be returned
+  --session=<value>           (required) 4 random symbol string that correspond to the session
 
 DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
+  Insert answer in the database
 ```
 
-_See code: [dist/commands/hello/index.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/hello/index.ts)_
+_See code: [dist/commands/doanswer.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/doanswer.ts)_
 
-## `se2229 hello world`
+## `se2229 getquestionanswers`
 
-Say hello world
+returns an object that includes all the answers (for all sessions) in a specific question of a specific questionnaire
 
 ```
 USAGE
-  $ se2229 hello world
+  $ se2229 getquestionanswers --format json|csv --questionnaire_id <value> --question_id <value>
+
+FLAGS
+  --format=<option>           (required) [default: json]
+                              <options: json|csv>
+  --question_id=<value>       (required) choose the question to be returned
+  --questionnaire_id=<value>  (required) choose the questionnaire whose getquestionanswers will be returned
 
 DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ se2229 hello world
-  hello world! (./src/commands/hello/world.ts)
+  returns an object that includes all the answers (for all sessions) in a specific question of a specific questionnaire
 ```
+
+_See code: [dist/commands/getquestionanswers.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/getquestionanswers.ts)_
+
+## `se2229 getsessionanswers`
+
+returns the answers of given questionnaireID and session
+
+```
+USAGE
+  $ se2229 getsessionanswers --format json|csv --questionnaire_id <value> --session <value>
+
+FLAGS
+  --format=<option>           (required) [default: json]
+                              <options: json|csv>
+  --questionnaire_id=<value>  (required) choose the questionnaire whose getsessionanswers will be returned
+  --session=<value>           (required) choose the session whose answers will be returned
+
+DESCRIPTION
+  returns the answers of given questionnaireID and session
+```
+
+_See code: [dist/commands/getsessionanswers.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/getsessionanswers.ts)_
+
+## `se2229 healthcheck`
+
+tests live server for errors
+
+```
+USAGE
+  $ se2229 healthcheck --format json|csv
+
+FLAGS
+  --format=<option>  (required) [default: json]
+                     <options: json|csv>
+
+DESCRIPTION
+  tests live server for errors
+```
+
+_See code: [dist/commands/healthcheck.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/healthcheck.ts)_
 
 ## `se2229 help [COMMANDS]`
 
@@ -333,220 +382,100 @@ FLAGS
 DESCRIPTION
   Update installed plugins.
 ```
-<!-- commandsstop -->
-* [`oex hello PERSON`](#oex-hello-person)
-* [`oex hello world`](#oex-hello-world)
-* [`oex help [COMMAND]`](#oex-help-command)
-* [`oex plugins`](#oex-plugins)
-* [`oex plugins:inspect PLUGIN...`](#oex-pluginsinspect-plugin)
-* [`oex plugins:install PLUGIN...`](#oex-pluginsinstall-plugin)
-* [`oex plugins:link PLUGIN`](#oex-pluginslink-plugin)
-* [`oex plugins:uninstall PLUGIN...`](#oex-pluginsuninstall-plugin)
-* [`oex plugins update`](#oex-plugins-update)
 
-## `oex hello PERSON`
+## `se2229 question`
 
-Say hello
+returns an object that includes the question info and options of a specific question of a specific questionnaire
 
 ```
 USAGE
-  $ oex hello [PERSON] -f <value>
-
-ARGUMENTS
-  PERSON  Person to say hello to
+  $ se2229 question --format json|csv --questionnaire_id <value> --question_id <value>
 
 FLAGS
-  -f, --from=<value>  (required) Who is saying hello
+  --format=<option>           (required) [default: json]
+                              <options: json|csv>
+  --question_id=<value>       (required) choose the question to be returned
+  --questionnaire_id=<value>  (required) choose the questionnaire whose question will be returned
 
 DESCRIPTION
-  Say hello
-
-EXAMPLES
-  $ oex hello friend --from oclif
-  hello friend from oclif! (./src/commands/hello/index.ts)
+  returns an object that includes the question info and options of a specific question of a specific questionnaire
 ```
 
-_See code: [dist/commands/hello/index.ts](https://github.com/oclif/hello-world/blob/v0.0.0/dist/commands/hello/index.ts)_
+_See code: [dist/commands/question.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/question.ts)_
 
-## `oex hello world`
+## `se2229 questionnaire`
 
-Say hello world
+returns an object that includes the questionnaireTitle, and the questions of the questionnaire with all their attributes
 
 ```
 USAGE
-  $ oex hello world
-
-DESCRIPTION
-  Say hello world
-
-EXAMPLES
-  $ oex hello world
-  hello world! (./src/commands/hello/world.ts)
-```
-
-## `oex help [COMMAND]`
-
-Display help for oex.
-
-```
-USAGE
-  $ oex help [COMMAND] [-n]
-
-ARGUMENTS
-  COMMAND  Command to show help for.
+  $ se2229 questionnaire --format json|csv --questionnaire_id <value>
 
 FLAGS
-  -n, --nested-commands  Include all nested commands in the output.
+  --format=<option>           (required) [default: json]
+                              <options: json|csv>
+  --questionnaire_id=<value>  (required) choose the questionnaire whose questionnaire will be returned
 
 DESCRIPTION
-  Display help for oex.
+  returns an object that includes the questionnaireTitle, and the questions of the questionnaire with all their
+  attributes
 ```
 
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.10/src/commands/help.ts)_
+_See code: [dist/commands/questionnaire.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/questionnaire.ts)_
 
-## `oex plugins`
+## `se2229 questionnaire_upd`
 
-List installed plugins.
+returns the answers of given questionnaireID and session
 
 ```
 USAGE
-  $ oex plugins [--core]
+  $ se2229 questionnaire_upd --format json|csv --source <value>
 
 FLAGS
-  --core  Show core plugins.
+  --format=<option>  (required) [default: json]
+                     <options: json|csv>
+  --source=<value>   (required) the file to upload to the server
 
 DESCRIPTION
-  List installed plugins.
-
-EXAMPLES
-  $ oex plugins
+  returns the answers of given questionnaireID and session
 ```
 
-_See code: [@oclif/plugin-plugins](https://github.com/oclif/plugin-plugins/blob/v2.0.11/src/commands/plugins/index.ts)_
+_See code: [dist/commands/questionnaire_upd.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/questionnaire_upd.ts)_
 
-## `oex plugins:inspect PLUGIN...`
+## `se2229 resetall`
 
-Displays installation properties of a plugin.
+reset data
 
 ```
 USAGE
-  $ oex plugins:inspect PLUGIN...
-
-ARGUMENTS
-  PLUGIN  [default: .] Plugin to inspect.
+  $ se2229 resetall --format json|csv
 
 FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
+  --format=<option>  (required) [default: json]
+                     <options: json|csv>
 
 DESCRIPTION
-  Displays installation properties of a plugin.
-
-EXAMPLES
-  $ oex plugins:inspect myplugin
+  reset data
 ```
 
-## `oex plugins:install PLUGIN...`
+_See code: [dist/commands/resetall.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/resetall.ts)_
 
-Installs a plugin into the CLI.
+## `se2229 resetq`
+
+reset question
 
 ```
 USAGE
-  $ oex plugins:install PLUGIN...
-
-ARGUMENTS
-  PLUGIN  Plugin to install.
+  $ se2229 resetq --format json|csv --questionnaire_id <value>
 
 FLAGS
-  -f, --force    Run yarn install with force flag.
-  -h, --help     Show CLI help.
-  -v, --verbose
+  --format=<option>           (required) [default: json]
+                              <options: json|csv>
+  --questionnaire_id=<value>  (required) choose the questionnaire to be reseted
 
 DESCRIPTION
-  Installs a plugin into the CLI.
-
-  Can be installed from npm or a git url.
-
-  Installation of a user-installed plugin will override a core plugin.
-
-  e.g. If you have a core plugin that has a 'hello' command, installing a user-installed plugin with a 'hello' command
-  will override the core plugin implementation. This is useful if a user needs to update core plugin functionality in
-  the CLI without the need to patch and update the whole CLI.
-
-ALIASES
-  $ oex plugins add
-
-EXAMPLES
-  $ oex plugins:install myplugin 
-
-  $ oex plugins:install https://github.com/someuser/someplugin
-
-  $ oex plugins:install someuser/someplugin
+  reset question
 ```
 
-## `oex plugins:link PLUGIN`
-
-Links a plugin into the CLI for development.
-
-```
-USAGE
-  $ oex plugins:link PLUGIN
-
-ARGUMENTS
-  PATH  [default: .] path to plugin
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Links a plugin into the CLI for development.
-
-  Installation of a linked plugin will override a user-installed or core plugin.
-
-  e.g. If you have a user-installed or core plugin that has a 'hello' command, installing a linked plugin with a 'hello'
-  command will override the user-installed or core plugin implementation. This is useful for development work.
-
-EXAMPLES
-  $ oex plugins:link myplugin
-```
-
-## `oex plugins:uninstall PLUGIN...`
-
-Removes a plugin from the CLI.
-
-```
-USAGE
-  $ oex plugins:uninstall PLUGIN...
-
-ARGUMENTS
-  PLUGIN  plugin to uninstall
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Removes a plugin from the CLI.
-
-ALIASES
-  $ oex plugins unlink
-  $ oex plugins remove
-```
-
-## `oex plugins update`
-
-Update installed plugins.
-
-```
-USAGE
-  $ oex plugins update [-h] [-v]
-
-FLAGS
-  -h, --help     Show CLI help.
-  -v, --verbose
-
-DESCRIPTION
-  Update installed plugins.
-```
+_See code: [dist/commands/resetq.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/resetq.ts)_
 <!-- commandsstop -->
