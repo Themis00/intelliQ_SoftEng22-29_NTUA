@@ -15,7 +15,7 @@ Command Line Interface of team 29
 <!-- tocstop -->
 # Usage
 <!-- usage -->
-cd to dir ./cli-client/ev_group32 and run:
+cd to dir ./cli-client/se2229 and run:
 ```sh-session
 $ npm install -g se2229
 $ se2229 COMMAND
