@@ -1,5 +1,8 @@
 import { Command, Flags } from '@oclif/core';
 import axios from 'axios';
+import * as https from 'https';
+
+axios.defaults.httpsAgent = new https.Agent();
 
 export default class getsessionanswers extends Command {
   static description = 'returns the answers of given questionnaireID and session';

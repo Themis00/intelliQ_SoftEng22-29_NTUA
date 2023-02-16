@@ -1,5 +1,8 @@
 import { Command, Flags } from '@oclif/core';
+import * as https from 'https';
 import axios from 'axios';
+
+axios.defaults.httpsAgent = new https.Agent();
 
 export default class questionnaire extends Command {
   static description = 'returns an object that includes the questionnaireTitle, and the questions of the questionnaire with all their attributes';

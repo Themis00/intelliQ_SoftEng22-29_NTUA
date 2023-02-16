@@ -1,5 +1,8 @@
 import { Command, Flags } from '@oclif/core';
 import axios from 'axios';
+import * as https from 'https';
+
+axios.defaults.httpsAgent = new https.Agent();
 
 export default class Healthcheck extends Command {
   static description = 'tests live server for errors';

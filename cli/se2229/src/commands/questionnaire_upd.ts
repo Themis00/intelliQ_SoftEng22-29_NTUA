@@ -2,6 +2,9 @@ import { Command, Flags } from '@oclif/core';
 import axios from 'axios';
 import { createReadStream } from 'fs';
 import FormData from 'form-data';
+import * as https from 'https';
+
+axios.defaults.httpsAgent = new https.Agent();
 
 export default class questionnaire_upd extends Command {
   static description = 'returns the answers of given questionnaireID and session';
