@@ -14,9 +14,10 @@
             </div>
         </div>
         <script>
+            var questionnaireid = localStorage.getItem('questionnaireid');
+            var firstquestionid = localStorage.getItem('firstquestionid');
             var questionmorph = [];
             var question;
-            var id = 'P00';
             var i = 0;
             var nextquestionID;
             var isRequired;
@@ -29,7 +30,7 @@
                 
                 $.ajax({
                     type:"GET",
-                    url:'http://localhost:9103/intelliq_api/question/QQ000/'+id+'',
+                    url:'http://localhost:9103/intelliq_api/question/'+questionnaireid+'/'+firstquestionid+'',
                     crossDomain:true,
                     success: function(data2){
                         if(data2){
@@ -120,7 +121,7 @@
             function savechoice(answer, optionID){
                 $.ajax({
                         type:"POST",
-                        url:'http://localhost:9103/intelliq_api/doanswer/QQ000/'+currentquestionID+'/1111/'+optionID+'',
+                        url:'http://localhost:9103/intelliq_api/doanswer/'+questionnaireid+'/'+currentquestionID+'/1111/'+optionID+'',
                         crossDomain:true,  
                     });
             }
@@ -128,7 +129,7 @@
             function saveanswer(answer, optionID){
                 $.ajax({
                         type:"POST",
-                        url:'http://localhost:9103/intelliq_api/doanswer/QQ000/'+currentquestionID+'/1111/'+optionID+'',
+                        url:'http://localhost:9103/intelliq_api/doanswer/'+questionnaireid+'/'+currentquestionID+'/1111/'+optionID+'',
                         crossDomain:true,  
                     });
             }
@@ -140,7 +141,7 @@
                 }else{
                     $.ajax({
                         type:"GET",
-                        url:'http://localhost:9103/intelliq_api/question/QQ000/'+currentquestionID+'',
+                        url:'http://localhost:9103/intelliq_api/question/'+questionnaireid+'/'+currentquestionID+'',
                         crossDomain:true,
                         success: function(data2){
                             if(data2){
@@ -187,7 +188,7 @@
                     currentResponse
                     $.ajax({
                         type:"POST",
-                        url:'http://localhost:9103/intelliq_api/doanswer/QQ000/Q06/1111/Q06A1',
+                        url:'http://localhost:9103/intelliq_api/doanswer/'+questionnaireid+'/Q06/1111/Q06A1',
                         crossDomain:true,  
                     });
                     counter++;

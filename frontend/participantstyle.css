@@ -40,11 +40,11 @@ button{
     border-radius: 25px;
     font-weight: bolt;
     border: 2px solid #009688;
-    background: transparent;
+    background: #fff;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    color: #fff;
+    color: black;
 }
 
 span{
@@ -60,11 +60,12 @@ span{
 }
 
 button:hover span{
-    background: #fff;
+    background: #009688;
     width: 100%;
 }
 
 button:hover{
+    background: #009688;
     border: none;
 }
 
@@ -151,5 +152,17 @@ button:hover{
 
 .question h1{
     font-size: 50px;
+    font-weight: bold;
+}
+
+.labeltext{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.boxsize{
+    padding: 2rem;
+    width: 30%;
+    font-size: 1rem;
     font-weight: bold;
 }

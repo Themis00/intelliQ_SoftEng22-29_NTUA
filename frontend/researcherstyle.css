@@ -40,17 +40,17 @@ button{
     border-radius: 25px;
     font-weight: bolt;
     border: 2px solid #009688;
-    background: transparent;
+    background: #fff;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    color: #fff;
+    color: black;
 }
 
 span{
     background: #009688;
     height: 100%;
-    width: 0;
+    width: 100%;
     border-radius: 25px;
     position: absolute;
     left: 0;
@@ -60,10 +60,12 @@ span{
 }
 
 button:hover span{
+    background: #009688;
     width: 100%;
 }
 
 button:hover{
+    background: #009688;
     border: none;
 }
 
@@ -85,11 +87,39 @@ button:hover{
 }
 
 .results {
-   
+    text-align: center;
     flex-basis: 31%;
     background: #fff;
+    width: fit-content;
     border-radius: 10px;
     margin-bottom: 5%;
     padding: 20px 12px;
     box-sizing: border-box;
+}
+
+.labeltext{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.boxsize{
+    padding: 2rem;
+    width: 30%;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.display {
+    text-align: center;
+    flex-basis: 31%;
+    background: #fff;
+    width: fit-content;
+    border-radius: 10px;
+    margin-bottom: 5%;
+    padding: 10px 6px;
+    box-sizing: border-box;
+}
+
+.display h1{
+    font-size: 30px;
 }

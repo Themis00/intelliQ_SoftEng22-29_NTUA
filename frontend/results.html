@@ -6,11 +6,76 @@
     </head>
     <body>
         <div class="banner">
+            <div id="results" class="results">
+                <button type="button" onclick="showresults()">Submit</button>
+            </div>
+            
         </div>
         <div class="box">
-            <div class="results">
-                <h1>results</h1>
-            </div>
+            <div class="display"></div>
         </div>
+        <script>
+            var questionnaireid = localStorage.getItem('questionnaireid');
+            var questiontitles = [];
+            var selectedquestionid;
+            var questionselect;
+            var option;
+            var allanswers;
+            var numberofanswers;
+            var i = 0;
+            $.ajax({
+                type:"GET",
+                url:'http://localhost:9103/intelliq_api/questionnaire/'+questionnaireid+'',
+                crossDomain:true,
+                success: function(data2){
+                    if(data2){
+                        questiontitles = data2.questions;
+                        var select = document.createElement("select");
+                        select.name = "questionsid";
+                        select.id = "questionsid"
+                        var i = 0;
+                        for (const val of questiontitles){
+                            option = document.createElement("option");
+                            option.value = questiontitles[i].qID;
+                            option.text = questiontitles[i].qID;
+                            select.appendChild(option);
+                            i++;
+                        }
+                        var label = document.createElement("label");
+                        label.innerHTML = "Διάλεξε ερώτηση: "
+                        label.htmlFor = "questionsid";
+                        
+                        document.getElementById("results").prepend(select);
+                        document.getElementById("results").prepend(label);
+                    }
+                }
+            })
+            
+
+            function showresults(){
+                questionselect = document.getElementById("questionsid");
+                selectedquestionid = questionselect.options[questionselect.selectedIndex].value;
+                //var html = '<h1>'+selectedquestionid+'</h1>';
+                //$('.box').html(html);
+                $.ajax({
+                type:"GET",
+                url:'http://localhost:9103/intelliq_api/getquestionanswers/'+questionnaireid+'/'+selectedquestionid+'',
+                crossDomain:true,
+                success: function(data2){
+                    if(data2){
+                        allanswers = data2.answers;
+                        numberofanswers = allanswers.length;
+                        var html = '<h1>answer, session</h1>';
+                        while(i < numberofanswers){
+                            html += '<h1>'+allanswers[i].ans+', '+allanswers[i].session+'</h1>';
+                            i ++;
+                        }
+                        i = 0;
+                        $('.display').html(html);
+                    }
+                }
+            })
+            }
+        </script>
     </body>
 </html>

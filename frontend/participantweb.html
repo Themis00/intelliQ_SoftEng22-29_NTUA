@@ -10,34 +10,45 @@
         </div>
         <div class="content">
             <div  class="questionnaire" data-id="">
-                <h1></h1>
-            </div>
-            <p>Press the button to start the Questionnaire</p>
-            <div>
-            <button type="button"><span></span><a href="questionnaire.html"> START!</a></button>
+                <div>
+                    <label for="questionnaireid" class="labeltext">Εισάγετε το ID του ερωτηματολογίου:</label><br>
+                    <input id="questionnaireid" type="text" class="boxsize">
+                </div>
+                <div>
+                    <button type="button" onclick="pickquestionnaire()">Υποβολή</button>
+                </div>
             </div>
         </div>
     </body>
     <script>
-        $( document ).ready(function() {
+        function pickquestionnaire(){
+            var questionnaireid = document.getElementById('questionnaireid').value;
+            if(questionnaireid === ''){
+
+            }else{
+            localStorage.setItem('questionnaireid', questionnaireid);
             var questionnairekeywords = [];
-            var counter = 0;
+            var questiontitles = [];
             var Title;
             $.ajax({
                 type:"GET",
-                url:'http://localhost:9103/intelliq_api/questionnaire/QQ000',
+                url:'http://localhost:9103/intelliq_api/questionnaire/'+questionnaireid+'',
                 crossDomain:true,
                 success: function(data2){
                     if(data2){
+                        questiontitles = data2.questions;
+                        var firstquestionid = questiontitles[0].qID;
+                        localStorage.setItem('firstquestionid', firstquestionid);
                         questionnairekeywords = data2.keywords;
-                        console.log(questionnairekeywords);
                         Title = data2.questionnaireTitle;
-                        console.log(Title);
-                        var html = '<h1>'+Title+'</h1><div style="margin: 2rem;"><h2>'+questionnairekeywords+'</div>';
+                        var html = '<h1>'+Title+'</h1><div style="margin: 2rem;"><h2>'+questionnairekeywords+'</div><p>Press the button to start the Questionnaire</p><div><button type="button"><span></span><a href="questionnaire.html"> START!</a></button></div>';
                         $('.questionnaire').html(html);
                     }
                 }
             })
-        });
+            }
+        }
+
+        
     </script>
 </html>
