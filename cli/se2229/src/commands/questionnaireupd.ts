@@ -6,7 +6,7 @@ import * as https from 'https';
 
 axios.defaults.httpsAgent = new https.Agent();
 
-export default class questionnaire_upd extends Command {
+export default class questionnaireupd extends Command {
   static description = 'add a new questionnaire';
 
   static flags = {
@@ -27,10 +27,10 @@ export default class questionnaire_upd extends Command {
     let data: any; // type annotation to specify the type of the variable
 
     try {
-      const { flags } = await this.parse(questionnaire_upd);
+      const { flags } = await this.parse(questionnaireupd);
       const file = createReadStream(flags.source);
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('questionnaire', file);
 
       if (flags.format === 'csv') {
         const response = await axios.post('http://localhost:9103/intelliq_api/admin/questionnaire_upd?format=csv', formData, {
