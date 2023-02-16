@@ -16,6 +16,7 @@
         <script>
             var questionnaireid = localStorage.getItem('questionnaireid');
             var firstquestionid = localStorage.getItem('firstquestionid');
+            var sessionID = localStorage.getItem('sessionID');
             var questionmorph = [];
             var question;
             var i = 0;
@@ -51,7 +52,7 @@
                                     if(isRequired){
                                         html += '<h3 class="error">*required field*</h3>';
                                     }
-                                    html += '<div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
+                                    html += '<div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled(\''+currentquestionID+'\')" class="submit">Υποβολή</button></div>';
                             } else{
                                 var html = '<h1>'+question+'</h1>';
                                 if(isRequired){
@@ -62,7 +63,7 @@
                                         i++;
                                 }
                                 i = 0;
-                                html += '<button onclick="checkifselected()" id="press" class="submit">Υποβολή</button></div>';
+                                html += '<button onclick="checkifselected(\''+currentquestionID+'\')" id="press" class="submit">Υποβολή</button></div>';
                             }
                             $('.question').html(html);
                         }
@@ -71,32 +72,33 @@
                 
             });
 
-            function checkiffilled(){
+            function checkiffilled(id){
                 apantisi = document.getElementById(questionmorph[0].optID).value;
                 if(isRequired){
                     if (apantisi === "") {
                     } else {
-                    //optionID = questionmorph[0].optID;
-                    //saveanswer(apantisi)
-                    console.log(apantisi);
+                    optionID = questionmorph[0].optID;
+                    saveanswer(apantisi, optionID, id);
                     nextquestion(nextquestionID);
                     }
                 }else{
-                    //optionID = questionmorph[0].optID;
-                    //saveanswer(apantisi)
-                    console.log(apantisi);
+                    if (apantisi === "") {
+                        nextquestion(nextquestionID);
+                    } else {
+                    optionID = questionmorph[0].optID;
+                    saveanswer(apantisi, optionID, id);
                     nextquestion(nextquestionID);
+                    }
                 }
                 
             }
 
-            function checkifselected() {
+            function checkifselected(id) {
                 nextquestionID = questionmorph[0].nextqID;
                 error = 0;
                 for(var j=0; j<choices; j++){
                     if(document.getElementById(questionmorph[j].optID).checked) {
                         nextquestionID = questionmorph[j].nextqID;
-                        //apantisi = questionmorph[j].opttxt;
                         optionID = questionmorph[j].optID;
                         break;
                     }else{
@@ -106,31 +108,35 @@
                 if(error == choices){
                     if(isRequired){
                     }else {
-                        optionID = null;
-                        //savechoice(optionID);
-                        console.log(optionID);
                         nextquestion(nextquestionID);
                     }
                 }else{
-                    //savechoice(optionID);
-                    console.log(optionID);
+                    savechoice(optionID, id);
                     nextquestion(nextquestionID);
                 }
             }
 
-            function savechoice(answer, optionID){
+            function savechoice(optionID, id){
+                //var questionanswer = {ans: optionID, questionnaireID: questionnaireid, session: sessionID, qID: id};
                 $.ajax({
                         type:"POST",
-                        url:'http://localhost:9103/intelliq_api/doanswer/'+questionnaireid+'/'+currentquestionID+'/1111/'+optionID+'',
-                        crossDomain:true,  
+                        url:'http://localhost:9103/intelliq_api/doanswer/'+questionnaireid+'/'+id+'/'+sessionID+'/'+optionID+'',
+                        crossDomain:true, 
+                        //data: questionanswer,
+                        success: function(response){
+                        }
                     });
             }
 
-            function saveanswer(answer, optionID){
+            function saveanswer(answer, optionID, id){
+                var questionanswer = {ans_str: answer};
                 $.ajax({
                         type:"POST",
-                        url:'http://localhost:9103/intelliq_api/doanswer/'+questionnaireid+'/'+currentquestionID+'/1111/'+optionID+'',
-                        crossDomain:true,  
+                        url:'http://localhost:9103/intelliq_api/doanswer/'+questionnaireid+'/'+id+'/'+sessionID+'/'+optionID+'',
+                        crossDomain:true,
+                        data: questionanswer,
+                        success: function(response){
+                        }
                     });
             }
     
@@ -161,7 +167,7 @@
                                     if(isRequired){
                                         html += '<h3 class="error">*required field*</h3>';
                                     }
-                                    html += '<div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled()" class="submit">Υποβολή</button></div>';
+                                    html += '<div style="margin: 2rem;"><input '+isRequiredHTML+' type="text" id="'+questionmorph[0].optID+'" class="pedio"></input><button onclick="checkiffilled(\''+currentquestionID+'\')" class="submit">Υποβολή</button></div>';
                                 } else{
                                     var html = '<h1>'+question+'</h1>';
                                     if(isRequired){
@@ -172,7 +178,7 @@
                                             i++;                              
                                     }
                                     i = 0;
-                                    html += '<button onclick="checkifselected()" class="submit">Υποβολή</button></div>';
+                                    html += '<button onclick="checkifselected(\''+currentquestionID+'\')" class="submit">Υποβολή</button></div>';
                                 }
                                 
                                 $('.question').html(html);

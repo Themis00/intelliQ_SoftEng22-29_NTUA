@@ -21,6 +21,17 @@
         </div>
     </body>
     <script>
+        $.ajax({
+                type:"GET",
+                url:'http://localhost:9103/intelliq_api/admin/session',
+                crossDomain:true,
+                success: function(data2){
+                    if(data2){
+                        var sessionID = data2.session;
+                        localStorage.setItem('sessionID', sessionID);
+                    }
+                }
+            })
         function pickquestionnaire(){
             var questionnaireid = document.getElementById('questionnaireid').value;
             if(questionnaireid === ''){
