@@ -20,7 +20,7 @@ class resetq extends core_1.Command {
     }
 }
 exports.default = resetq;
-resetq.description = 'reset question';
+resetq.description = 'reset questions';
 resetq.flags = {
     format: core_1.Flags.string({
         options: ['json', 'csv'],

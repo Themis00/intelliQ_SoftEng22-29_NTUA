@@ -26,7 +26,7 @@ class getsessionanswers extends core_1.Command {
     }
 }
 exports.default = getsessionanswers;
-getsessionanswers.description = 'returns the answers of given questionnaireID and session';
+getsessionanswers.description = 'returns the answers of given questionnaireID and sessionID';
 getsessionanswers.flags = {
     // flag with a value (-n, --name=VALUE)
     format: core_1.Flags.string({
@@ -36,7 +36,7 @@ getsessionanswers.flags = {
     }),
     questionnaire_id: core_1.Flags.string({
         required: true,
-        description: 'choose the questionnaire whose getsessionanswers will be returned'
+        description: 'choose the questionnaire whose answers will be returned'
     }),
     session_id: core_1.Flags.string({
         required: true,

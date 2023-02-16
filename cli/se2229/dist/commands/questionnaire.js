@@ -36,6 +36,6 @@ questionnaire.flags = {
     }),
     questionnaire_id: core_1.Flags.string({
         required: true,
-        description: 'choose the questionnaire whose questionnaire will be returned'
+        description: 'choose the questionnaire whose questions will be returned'
     }),
 };
