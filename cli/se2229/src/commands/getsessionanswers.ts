@@ -5,7 +5,7 @@ import * as https from 'https';
 axios.defaults.httpsAgent = new https.Agent();
 
 export default class getsessionanswers extends Command {
-  static description = 'returns the answers of given questionnaireID and session';
+  static description = 'returns the answers of given questionnaireID and sessionID';
 
   static flags = {
     // flag with a value (-n, --name=VALUE)
@@ -16,7 +16,7 @@ export default class getsessionanswers extends Command {
     }),
     questionnaire_id: Flags.string({
       required: true,
-      description: 'choose the questionnaire whose getsessionanswers will be returned'
+      description: 'choose the questionnaire whose answers will be returned'
     }),
     session_id: Flags.string({
       required: true,

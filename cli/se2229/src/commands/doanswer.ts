@@ -15,11 +15,11 @@ export default class doanswer extends Command {
     }),
     questionnaire_id: Flags.string({
       required: true,
-      description: 'choose the questionnaire whose question will be returned'
+      description: 'choose the questionnaire whose answer will be returned'
     }),
     question_id: Flags.string({
       required: true,
-      description: 'choose the question to be returned'
+      description: 'choose the question whose answer will be returned'
      }),
     session_id: Flags.string({
       required: true,

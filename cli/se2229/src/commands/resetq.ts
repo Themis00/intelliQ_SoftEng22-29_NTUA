@@ -5,7 +5,7 @@ import * as https from 'https';
 axios.defaults.httpsAgent = new https.Agent();
 
 export default class resetq extends Command {
-  static description = 'reset question';
+  static description = 'reset questions';
 
   static flags = {
     format: Flags.string({

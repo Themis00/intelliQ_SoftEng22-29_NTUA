@@ -42,16 +42,16 @@ Insert answer in the database
 
 ```
 USAGE
-  $ se2229 doanswer --format json|csv --questionnaire_id <value> --question_id <value> --session <value>
+  $ se2229 doanswer --format json|csv --questionnaire_id <value> --question_id <value> --session_id <value>
     --option_id <value>
 
 FLAGS
   --format=<option>           (required) [default: json]
                               <options: json|csv>
   --option_id=<value>         (required) the ID of the option selected for the answer
-  --question_id=<value>       (required) choose the question to be returned
-  --questionnaire_id=<value>  (required) choose the questionnaire whose question will be returned
-  --session=<value>           (required) 4 random symbol string that correspond to the session
+  --question_id=<value>       (required) choose the question whose answer will be returned
+  --questionnaire_id=<value>  (required) choose the questionnaire whose answer will be returned
+  --session_id=<value>           (required) 4 random symbol string that correspond to the session
 
 DESCRIPTION
   Insert answer in the database
@@ -70,8 +70,8 @@ USAGE
 FLAGS
   --format=<option>           (required) [default: json]
                               <options: json|csv>
-  --question_id=<value>       (required) choose the question to be returned
-  --questionnaire_id=<value>  (required) choose the questionnaire whose getquestionanswers will be returned
+  --question_id=<value>       (required) choose the question whose answer will be returned
+  --questionnaire_id=<value>  (required) choose the questionnaire whose answers will be returned
 
 DESCRIPTION
   returns an object that includes all the answers (for all sessions) in a specific question of a specific questionnaire
@@ -81,17 +81,17 @@ _See code: [dist/commands/getquestionanswers.ts](https://github.com/cli/se2229/b
 
 ## `se2229 getsessionanswers`
 
-returns the answers of given questionnaireID and session
+returns the answers of given questionnaireID and sessionID
 
 ```
 USAGE
-  $ se2229 getsessionanswers --format json|csv --questionnaire_id <value> --session <value>
+  $ se2229 getsessionanswers --format json|csv --questionnaire_id <value> --session_id <value>
 
 FLAGS
   --format=<option>           (required) [default: json]
                               <options: json|csv>
-  --questionnaire_id=<value>  (required) choose the questionnaire whose getsessionanswers will be returned
-  --session=<value>           (required) choose the session whose answers will be returned
+  --questionnaire_id=<value>  (required) choose the questionnaire whose answers will be returned
+  --session_id=<value>        (required) choose the session whose answers will be returned
 
 DESCRIPTION
   returns the answers of given questionnaireID and session
@@ -148,7 +148,7 @@ USAGE
 FLAGS
   --format=<option>           (required) [default: json]
                               <options: json|csv>
-  --questionnaire_id=<value>  (required) choose the questionnaire whose questionnaire will be returned
+  --questionnaire_id=<value>  (required) choose the questionnaire whose questions will be returned
 
 DESCRIPTION
   returns an object that includes the questionnaireTitle, and the questions of the questionnaire with all their
@@ -159,7 +159,7 @@ _See code: [dist/commands/questionnaire.ts](https://github.com/cli/se2229/blob/v
 
 ## `se2229 questionnaire_upd`
 
-returns the answers of given questionnaireID and session
+add a new questionnaire
 
 ```
 USAGE
@@ -171,7 +171,7 @@ FLAGS
   --source=<value>   (required) the file to upload to the server
 
 DESCRIPTION
-  returns the answers of given questionnaireID and session
+  add a new questionnaire
 ```
 
 _See code: [dist/commands/questionnaire_upd.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/questionnaire_upd.ts)_
@@ -196,7 +196,7 @@ _See code: [dist/commands/resetall.ts](https://github.com/cli/se2229/blob/v0.0.0
 
 ## `se2229 resetq`
 
-reset question
+reset questions
 
 ```
 USAGE
@@ -208,7 +208,7 @@ FLAGS
   --questionnaire_id=<value>  (required) choose the questionnaire to be reseted
 
 DESCRIPTION
-  reset question
+  reset questions
 ```
 
 _See code: [dist/commands/resetq.ts](https://github.com/cli/se2229/blob/v0.0.0/dist/commands/resetq.ts)_

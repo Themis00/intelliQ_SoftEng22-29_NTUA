@@ -16,11 +16,11 @@ export default class getquestionanswers extends Command {
     }),
     questionnaire_id: Flags.string({
       required: true,
-      description: 'choose the questionnaire whose getquestionanswers will be returned'
+      description: 'choose the questionnaire whose answers will be returned'
     }),
     question_id: Flags.string({
       required: true,
-      description: 'choose the question to be returned'
+      description: 'choose the question whose answer will be returned'
      }),
   };
 

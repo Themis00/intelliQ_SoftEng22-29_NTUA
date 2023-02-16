@@ -16,7 +16,7 @@ export default class questionnaire extends Command {
     }),
     questionnaire_id: Flags.string({
       required: true,
-      description: 'choose the questionnaire whose questionnaire will be returned'
+      description: 'choose the questionnaire whose questions will be returned'
     }),
   };
 
