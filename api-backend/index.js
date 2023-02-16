@@ -47,11 +47,13 @@ const healthcheck = require("./admin/healthcheck.js");
 const questionnaireUpd = require("./admin/questionnaireUpd.js");
 const resetall = require("./admin/resetall.js");
 const resetq = require("./admin/resetq.js");
+const startSession = require("./admin/startSession.js");
 
 app.use('/intelliq_api',healthcheck);
 app.use('/intelliq_api',questionnaireUpd);
 app.use('/intelliq_api',resetall);
 app.use('/intelliq_api',resetq);
+app.use('/intelliq_api',startSession);
 
 // System Function
 const getQuestionnaire = require("./endpoints/getQuestionnaire.js");

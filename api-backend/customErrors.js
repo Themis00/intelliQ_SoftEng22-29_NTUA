@@ -25,6 +25,12 @@ module.exports = {
         super(message);
         this.name = "FormatQueryParamError";
     }
-}
+  },
+  InsertTimeoutError: class extends Error{
+    constructor(message) {
+        super(message);
+        this.name = "InsertTimeoutError";
+    }
+  }
 } 
 
