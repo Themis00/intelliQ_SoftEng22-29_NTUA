@@ -66,8 +66,9 @@
                         allanswers = data2.answers;
                         numberofanswers = allanswers.length;
                         var html = '<h1>answer, session</h1>';
+                        html += '<h3><hr></h3><br>'
                         while(i < numberofanswers){
-                            html += '<h1>'+allanswers[i].ans+', '+allanswers[i].session+'</h1>';
+                            html += '<h2>'+allanswers[i].ans+', '+allanswers[i].session+'</h2>';
                             i ++;
                         }
                         i = 0;
