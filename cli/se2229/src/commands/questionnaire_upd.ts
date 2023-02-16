@@ -7,7 +7,7 @@ import * as https from 'https';
 axios.defaults.httpsAgent = new https.Agent();
 
 export default class questionnaire_upd extends Command {
-  static description = 'returns the answers of given questionnaireID and session';
+  static description = 'add a new questionnaire';
 
   static flags = {
     // flag with a value (-n, --name=VALUE)
@@ -33,12 +33,12 @@ export default class questionnaire_upd extends Command {
       formData.append('file', file);
 
       if (flags.format === 'csv') {
-        const response = await axios.post('http://localhost:9103/intelliq_api/questionnaire_upd?format=csv', formData, {
+        const response = await axios.post('http://localhost:9103/intelliq_api/admin/questionnaire_upd?format=csv', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         });
         data = response.data;
       } else {        
-        const response = await axios.post('http://localhost:9103/intelliq_api/questionnaire_upd', formData, {
+        const response = await axios.post('http://localhost:9103/intelliq_api/admin/questionnaire_upd', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         });
         data = response.data;

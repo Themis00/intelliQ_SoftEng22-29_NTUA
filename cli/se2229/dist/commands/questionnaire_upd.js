@@ -16,13 +16,13 @@ class questionnaire_upd extends core_1.Command {
             const formData = new form_data_1.default();
             formData.append('file', file);
             if (flags.format === 'csv') {
-                const response = await axios_1.default.post('http://localhost:9103/intelliq_api/questionnaire_upd?format=csv', formData, {
+                const response = await axios_1.default.post('http://localhost:9103/intelliq_api/admin/questionnaire_upd?format=csv', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
                 data = response.data;
             }
             else {
-                const response = await axios_1.default.post('http://localhost:9103/intelliq_api/questionnaire_upd', formData, {
+                const response = await axios_1.default.post('http://localhost:9103/intelliq_api/admin/questionnaire_upd', formData, {
                     headers: { 'Content-Type': 'multipart/form-data' },
                 });
                 data = response.data;
@@ -35,7 +35,7 @@ class questionnaire_upd extends core_1.Command {
     }
 }
 exports.default = questionnaire_upd;
-questionnaire_upd.description = 'returns the answers of given questionnaireID and session';
+questionnaire_upd.description = 'add a new questionnaire';
 questionnaire_upd.flags = {
     // flag with a value (-n, --name=VALUE)
     format: core_1.Flags.string({
