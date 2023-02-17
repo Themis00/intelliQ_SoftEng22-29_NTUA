@@ -5,7 +5,7 @@ describe('questionnaireupd', () => {
   .stdout()
   .command(['questionnaireupd', '--format=json', '--source=file.json'])
   .it('add a new questionnaire with JSON format', ctx => {
-    expect(ctx.stdout).to.contain('hello world')
+    expect(ctx.stdout).to.contain({ status: 'Success' })
   })
 
   test
