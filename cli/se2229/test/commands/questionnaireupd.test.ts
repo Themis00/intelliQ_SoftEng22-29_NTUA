@@ -3,15 +3,16 @@ import {expect, test} from '@oclif/test'
 describe('questionnaireupd', () => {
   test
   .stdout()
-  .command(['questionnaireupd'])
-  .it('runs hello', ctx => {
+  .command(['questionnaireupd', '--format=json', '--source=file.json'])
+  .it('add a new questionnaire with JSON format', ctx => {
     expect(ctx.stdout).to.contain('hello world')
   })
 
   test
-  .stdout()
-  .command(['questionnaireupd', '--name', 'jeff'])
-  .it('runs hello --name jeff', ctx => {
-    expect(ctx.stdout).to.contain('hello jeff')
-  })
+    .stderr()
+    .command(['questionnaireupd', '--format=json', '--questionnaire_id=123'])
+    .exit(1)
+    .it('returns an error message for an invalid questionnaire', (ctx) => {
+      expect(ctx.stderr).to.contain('invalid questionnaire error message');
+    });
 })
