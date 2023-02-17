@@ -551,10 +551,10 @@ async function questionnaire_update(req,res){
         }
         else if(err instanceof WrongEntryError){
             if(req.query.format == "csv"){
-                res.status(400).send([["name","message"],[err.name,err.message + " Please check the questionnaire_update_instructions text file."]]);
+                res.status(400).send([["name","message"],[err.name,err.message + " Please check the API documentation."]]);
             }
             else{
-                res.status(400).send({"name":err.name,"message":err.message + " Please check the questionnaire_update_instructions text file."});
+                res.status(400).send({"name":err.name,"message":err.message + " Please check the API documentation."});
             }
         }
         else if(err instanceof mariadb.SqlError){ // For any other sql error
