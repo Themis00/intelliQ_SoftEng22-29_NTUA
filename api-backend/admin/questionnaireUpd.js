@@ -43,7 +43,7 @@ async function questionnaire_update(req,res){
                 return;
             }
            
-            console.log("1");
+            
             // Define 4 flags to note error in a specific part of data insertion
             let questionnaireErrorFlag = 0;
             let keywordErrorFlag = 0;
@@ -55,9 +55,8 @@ async function questionnaire_update(req,res){
             const pool = require(path.resolve("db_connection/getPool.js"));
             
             await new Promise((resolve,reject) => pool.getConnection(async function(err,connection) {
-                console.log("2");
+                
                 if (err){
-                    console.log("2.err");
                     reject(err);
                     return;
                 }
@@ -90,9 +89,8 @@ async function questionnaire_update(req,res){
                 let myquery= "insert into `questionnaire` values (" + "'" + questionnaireID + "'" + "," + "'" + questionnaireTitle + "'" + ");";
                 
                 await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
-                    console.log("3");
+                    
                     if (err){
-                        console.log("3.err");
                         questionnaireErrorFlag = 1;
                         reject(err);
                         return;
@@ -101,7 +99,7 @@ async function questionnaire_update(req,res){
                     return;
                 }))
                 .catch(function(err){ // Throw exception outside function, release the existent connection
-                    console.log("3.catch");
+                    
                     if(connection){ // If exception does not occur due to database connection error, release the existent connection
                         connection.release();
                         console.log("Disconnected from db");
@@ -112,20 +110,19 @@ async function questionnaire_update(req,res){
                 
             //-------------------------------------------------------------------------------------------------------------------------------
                 if(questionnaireErrorFlag == 0){ // Continue to next steps only if questionnaire data inserted without errors
-                    console.log("4");
+                   
 
                     // Insert keywords data
                     let keywords = body.keywords;
 
                     if(keywords != null && !(Array.isArray(keywords)) && typeof keywords != "string"){ // Keywords are not required. Every keyword should be is a string, or an array of strings if multiple
-                        console.log("4.1");
+                      
                         errorMessage = "Keywords must be a string or an array of strings. They are optional.";
                         keywordErrorFlag = 1;
                     }
 
                     if(typeof keywords == "string"){
                         if(keywords.length == 0){
-                            console.log("4.2");
                             errorMessage = "A keyword length cannot be zero. Try null value instead.";
                             keywordErrorFlag = 1;
                         }
@@ -135,7 +132,6 @@ async function questionnaire_update(req,res){
                     }
                     else if(Array.isArray(keywords)){
                         if(keywords.length == 0){
-                            console.log("4.3");
                             errorMessage = "Keywords cannot be a empty array. Try null value instead.";
                             keywordErrorFlag = 1;
                         }
@@ -144,13 +140,11 @@ async function questionnaire_update(req,res){
                             for(let i=0; i<keywords.length; i++){
 
                                 if(typeof keywords[i] != "string"){
-                                    console.log("4.4");
                                     errorMessage = "Every keyword in the array must be a string. Try null instead of an array if you do not want any keywords.";
                                     keywordErrorFlag = 1;
                                     break;
                                 }
                                 else if(keywords[i].length == 0){
-                                    console.log("4.5");
                                     errorMessage = "A keyword cannot have length 0.";
                                     keywordErrorFlag = 1;
                                     break;
@@ -170,7 +164,6 @@ async function questionnaire_update(req,res){
                     
                     if(keywordErrorFlag == 1){ // If an error occured at keywords insertion
                         
-                        console.log("Delete error data inserted 1");
                         myquery = "delete from `questionnaire` where questionnaireID =" + "'" + questionnaireID + "';";
 
                         await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) { // Firstly delete all previous data inserted
@@ -186,7 +179,6 @@ async function questionnaire_update(req,res){
                             return;
                         }))
                         .catch(function(err){ // Throw exception outside function, release the existent connection
-                            console.log("test2");
                             if(connection){ // If exception does not occur due to database connection error, release the existent connection
                                 connection.release();
                                 console.log("Disconnected from db");
@@ -200,9 +192,7 @@ async function questionnaire_update(req,res){
                     
                     if(keywords != null){
                         await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
-                            console.log("4.1");
                             if (err){
-                                console.log("4.1.err");
                                 keywordErrorFlag = 1;
                                 reject(err);
                                 return;
@@ -210,7 +200,6 @@ async function questionnaire_update(req,res){
                             resolve();
                             return;
                         })).catch(function(err){ // Throw exception outside function, release the existent connection
-                            console.log("4.1.catch");
                             reject(err);
                             return;
                         });
@@ -218,7 +207,7 @@ async function questionnaire_update(req,res){
                     
                 //-------------------------------------------------------------------------------------------------------------------------------
                     if(keywordErrorFlag == 0){ // Continue to next steps only if keywords data inserted without errors
-                        console.log("5");
+                    
                         // Insert questions data
                         
                         let questionsList = body.questions;
@@ -287,7 +276,6 @@ async function questionnaire_update(req,res){
 
                         if(questionErrorFlag == 1){ // If an error occured at question insertion
                         
-                            console.log("Delete error data inserted 2");
                             myquery = "delete from `questionnaire` where questionnaireID =" + "'" + questionnaireID + "';";
         
                             await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) { // Firstly delete all previous data inserted
@@ -303,7 +291,7 @@ async function questionnaire_update(req,res){
                                 return;
                             }))
                             .catch(function(err){ // Throw exception outside function, release the existent connection
-                                console.log("test2");
+                              
                                 if(connection){ // If exception does not occur due to database connection error, release the existent connection
                                     connection.release();
                                     console.log("Disconnected from db");
@@ -316,9 +304,8 @@ async function questionnaire_update(req,res){
                         }
                         else{
                             await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
-                                console.log("5.1");
+                             
                                 if (err){
-                                    console.log("5.1.err");
                                     questionErrorFlag = 1;
                                     reject(err);
                                     return;
@@ -326,7 +313,6 @@ async function questionnaire_update(req,res){
                                 resolve();
                                 return;
                             })).catch(function(err){ // Throw exception outside function, release the existent connection
-                                console.log("5.1.catch");
                                 reject(err);
                                 return;
                             });
@@ -334,13 +320,13 @@ async function questionnaire_update(req,res){
                     
                     //-------------------------------------------------------------------------------------------------------------------------------
                         if(questionErrorFlag == 0){ // Continue to next steps only if questions data inserted without errors
-                            console.log("6");
+                     
                             // Insert options data
                             let optionList = questionsList[0]["options"]; // Initialize list of options of a question 
                             let qIDFound // Helping variable
 
                             for(let i=0; i<questionsList.length; i++){ // For all questions
-                                //console.log(i);
+                             
                                 optionList = questionsList[i]["options"]; // Update option list for current question
 
                                 if(!Array.isArray(optionList)){
@@ -421,7 +407,6 @@ async function questionnaire_update(req,res){
 
                                     if(optionErrorFlag == 1){ // If an error occured at option insertion
                         
-                                        console.log("Delete error data inserted 3");
                                         myquery = "delete from `questionnaire` where questionnaireID =" + "'" + questionnaireID + "';";
                     
                                         await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) { // Firstly delete all previous data inserted
@@ -437,7 +422,6 @@ async function questionnaire_update(req,res){
                                             return;
                                         }))
                                         .catch(function(err){ // Throw exception outside function, release the existent connection
-                                            console.log("test2");
                                             if(connection){ // If exception does not occur due to database connection error, release the existent connection
                                                 connection.release();
                                                 console.log("Disconnected from db");
@@ -450,10 +434,9 @@ async function questionnaire_update(req,res){
                                     }
                                     else{
                                         await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
-                                            console.log("6.1");
+        
                                             if (err){
                                                 optionErrorFlag = 1;
-                                                console.log("6.1.err");
                                                 reject(err);
                                                 return;
                                             }
@@ -462,7 +445,6 @@ async function questionnaire_update(req,res){
                                         }))
                                         
                                         .catch(function(err){ // Throw exception outside function, release the existent connection
-                                            console.log("6.1.catch");
                                             reject(err);
                                             return;
                                         });
@@ -472,7 +454,7 @@ async function questionnaire_update(req,res){
                                 if(optionErrorFlag == 1) break; // If there is a wrong option input, stop inserting
                                 else if(i == questionsList.length - 1){
                                     connection.release();
-                                    console.log("Disconnected from db1");
+                                    console.log("Disconnected from db");
                                 }
                             }
                         }
@@ -480,7 +462,7 @@ async function questionnaire_update(req,res){
                 }
             
                 if(questionnaireErrorFlag == 0 && (keywordErrorFlag == 1 || questionErrorFlag == 1 || optionErrorFlag == 1)){ // If an error has occured and there are data that are not deleted delete them
-                    console.log("Delete error data inserted");
+                 
                     myquery = "delete from `questionnaire` where questionnaireID =" + "'" + questionnaireID + "';";
 
                     await new Promise((resolve,reject) => connection.query(myquery, function (err, result, fields) {
@@ -511,7 +493,6 @@ async function questionnaire_update(req,res){
                 return;
 
             })).catch(function(err){ // Throw exception outside function
-                console.log("catch_err");
                 reject(err);
                 return;  
             });
@@ -519,7 +500,7 @@ async function questionnaire_update(req,res){
         resolve();
         return;
         }))
-        console.log("ok");
+       
         if(req.query.format == "csv"){
             res.status(200).send([["status"],["Success"]]);
         }
@@ -529,7 +510,7 @@ async function questionnaire_update(req,res){
         
     }
     catch(err){
-        console.log("catch_err_2");
+        
         if(err instanceof FormatQueryParamError){
             res.status(400).send(err);
         }

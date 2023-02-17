@@ -1,0 +1,1867 @@
+{
+	"info": {
+		"_postman_id": "4a615774-3494-4846-9194-28e2136360db",
+		"name": "Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25448571"
+	},
+	"item": [
+		{
+			"name": "healthcheck test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/healthcheck",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"healthcheck"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Check database connectivity"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestionnaire - Wrong questionnaireID input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is WrongEntryError\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"WrongEntryError\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/questionnaire/:questionnaireID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"questionnaire",
+						":questionnaireID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "wrong_input"
+						}
+					]
+				},
+				"description": "Get questionnaire\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestionnaire - QQ000",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct response\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.questionnaireID).to.eql(\"QQ000\");\r",
+							"    pm.expect(responseJson.questions).to.have.lengthOf(20);\r",
+							"    pm.expect(responseJson.questions[0].qID).to.eql(\"P00\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/questionnaire/:questionnaireID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"questionnaire",
+						":questionnaireID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						}
+					]
+				},
+				"description": "Get questionnaire\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestion - Wrong questionnaireID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is WrongEntryError\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"WrongEntryError\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "wrong_input"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						}
+					]
+				},
+				"description": "Get question"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestion - Wrong qID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is WrongEntryError\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"WrongEntryError\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "wrong_input"
+						}
+					]
+				},
+				"description": "Get question"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestion - Q04",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct response\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.questionnaireID).to.eql(\"QQ000\");\r",
+							"    pm.expect(responseJson.qID).to.eql(\"Q04\");\r",
+							"    pm.expect(responseJson.options).to.have.lengthOf(4);\r",
+							"    pm.expect(responseJson.options[1].optID).to.eql(\"Q04A2\");\r",
+							"\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"question",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q04"
+						}
+					]
+				},
+				"description": "Get question"
+			},
+			"response": []
+		},
+		{
+			"name": "getSessionAnswers - Wrong questionnaireID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"There is no such questionnaire.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getsessionanswers/:questionnaireID/:session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getsessionanswers",
+						":questionnaireID",
+						":session"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "wrong_input"
+						},
+						{
+							"key": "session",
+							"value": "7LXH"
+						}
+					]
+				},
+				"description": "Get all the answers given in a specific session"
+			},
+			"response": []
+		},
+		{
+			"name": "getSessionAnswers - Wrong session",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"There is no such session.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getsessionanswers/:questionnaireID/:session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getsessionanswers",
+						":questionnaireID",
+						":session"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "wrong_input"
+						}
+					]
+				},
+				"description": "Get all the answers given in a specific session"
+			},
+			"response": []
+		},
+		{
+			"name": "getSessionAnswers - QQ000 - 7LXH",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct response\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.answers).to.have.lengthOf(11);\r",
+							"    pm.expect(responseJson.answers[0].ans_str).to.eql(\"email1\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getsessionanswers/:questionnaireID/:session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getsessionanswers",
+						":questionnaireID",
+						":session"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "7LXH"
+						}
+					]
+				},
+				"description": "Get all the answers given in a specific session"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestionAnswers - Wrong questionnaireID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"There is no such questionnaire-question pair.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getquestionanswers/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getquestionanswers",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "wrong_input"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						}
+					]
+				},
+				"description": "Get all answers given in a specific question (for all sessions)"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestionAnswers - Wrong qID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"There is no such questionnaire-question pair.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getquestionanswers/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getquestionanswers",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "wrong_input"
+						}
+					]
+				},
+				"description": "Get all answers given in a specific question (for all sessions)"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestionAnswers - QQ000 - Q01",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct response\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.answers).to.have.lengthOf(10);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getquestionanswers/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getquestionanswers",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						}
+					]
+				},
+				"description": "Get all answers given in a specific question (for all sessions)"
+			},
+			"response": []
+		},
+		{
+			"name": "resetq - Wrong questionnaireID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"failed\");\r",
+							"    pm.expect(responseJson.reason).to.eql(\"There is no such questionnaire.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/resetq/:questionnaireID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"resetq",
+						":questionnaireID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "wrong_input"
+						}
+					]
+				},
+				"description": "Delete all answers given in a specific questionnaire"
+			},
+			"response": []
+		},
+		{
+			"name": "resetq - QQ000  Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct response\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"OK\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/resetq/:questionnaireID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"resetq",
+						":questionnaireID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						}
+					]
+				},
+				"description": "Delete all answers given in a specific questionnaire"
+			},
+			"response": []
+		},
+		{
+			"name": "resetq - QQ000  No data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"failed\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/resetq/:questionnaireID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"resetq",
+						":questionnaireID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						}
+					]
+				},
+				"description": "Delete all answers given in a specific questionnaire"
+			},
+			"response": []
+		},
+		{
+			"name": "getSessionAnswers - QQ000 - 7LXH No data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getsessionanswers/:questionnaireID/:session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getsessionanswers",
+						":questionnaireID",
+						":session"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "session",
+							"value": "7LXH"
+						}
+					]
+				},
+				"description": "Get all the answers given in a specific session"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestionAnswers - QQ000 - Q01 No data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getquestionanswers/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getquestionanswers",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						}
+					]
+				},
+				"description": "Get all answers given in a specific question (for all sessions)"
+			},
+			"response": []
+		},
+		{
+			"name": "startSession test",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const responseJson = pm.response.json();\r",
+							"pm.globals.set(\"new_session\", responseJson.session);\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/session",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"session"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "csv",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer - Wrong (question, option) combination",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"There is no option Q01A1 in question P00 of questionnaire QQ000.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"doanswer",
+						":questionnaireID",
+						":questionID",
+						":session",
+						":optionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P00"
+						},
+						{
+							"key": "session",
+							"value": "{{new_session}}"
+						},
+						{
+							"key": "optionID",
+							"value": "Q01A1"
+						}
+					]
+				},
+				"description": "Insert answer"
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer - No ans_str given in P00",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"The option P00TXT requires an answer string\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"doanswer",
+						":questionnaireID",
+						":questionID",
+						":session",
+						":optionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "P00"
+						},
+						{
+							"key": "session",
+							"value": "{{new_session}}"
+						},
+						{
+							"key": "optionID",
+							"value": "P00TXT"
+						}
+					]
+				},
+				"description": "Insert answer"
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer - Valid input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"doanswer",
+						":questionnaireID",
+						":questionID",
+						":session",
+						":optionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						},
+						{
+							"key": "session",
+							"value": "{{new_session}}"
+						},
+						{
+							"key": "optionID",
+							"value": "Q01A1"
+						}
+					]
+				},
+				"description": "Insert answer"
+			},
+			"response": []
+		},
+		{
+			"name": "doanswer - Answer to the same question",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"This question has already been answered in this session\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"doanswer",
+						":questionnaireID",
+						":questionID",
+						":session",
+						":optionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						},
+						{
+							"key": "session",
+							"value": "{{new_session}}"
+						},
+						{
+							"key": "optionID",
+							"value": "Q01A1"
+						}
+					]
+				},
+				"description": "Insert answer"
+			},
+			"response": []
+		},
+		{
+			"name": "getQuestionAnswers - Check the answer input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct response\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.answers).to.have.lengthOf(1);\r",
+							"    pm.expect(responseJson.answers[0].session).to.eql(pm.globals.get(\"new_session\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/getquestionanswers/:questionnaireID/:questionID",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"getquestionanswers",
+						":questionnaireID",
+						":questionID"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "questionnaireID",
+							"value": "QQ000"
+						},
+						{
+							"key": "questionID",
+							"value": "Q01"
+						}
+					]
+				},
+				"description": "Get all answers given in a specific question (for all sessions)"
+			},
+			"response": []
+		},
+		{
+			"name": "resetall - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Correct response\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"OK\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/resetall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"resetall"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Delete all data from database"
+			},
+			"response": []
+		},
+		{
+			"name": "resetall - No data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.status).to.eql(\"failed\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/resetall",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"resetall"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Delete all data from database"
+			},
+			"response": []
+		},
+		{
+			"name": "resetall - No data wrong format input",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error message\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.message).to.eql(\"Not valid \\\"format\\\" parameter. Try \\\"json\\\", \\\"csv\\\" or nothing.\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/resetall?format=wrong_input",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"resetall"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "wrong_input"
+						}
+					]
+				},
+				"description": "Delete all data from database"
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd - No questionnaire insert",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is WrongEntryError\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"WrongEntryError\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "questionnaire",
+							"type": "file",
+							"src": []
+						},
+						{
+							"key": "",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/questionnaire_upd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"questionnaire_upd"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Upload questionnaire"
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd - JSON Syntax Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error type is SyntaxError\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"SyntaxError\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "questionnaire",
+							"type": "file",
+							"src": "/C:/Users/ef200/Documents/SoftEng22-29/test/api-testing/testing_questionnaire_jsons/wrong_QQ000.json"
+						},
+						{
+							"key": "",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/questionnaire_upd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"questionnaire_upd"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Upload questionnaire"
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd - Correct update",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "questionnaire",
+							"type": "file",
+							"src": "/C:/Users/ef200/Documents/SoftEng22-29/test/api-testing/testing_questionnaire_jsons/QQ000.json"
+						},
+						{
+							"key": "",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/questionnaire_upd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"questionnaire_upd"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Upload questionnaire"
+			},
+			"response": []
+		},
+		{
+			"name": "questionnaire_upd - Same questionnaire ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {\r",
+							"    pm.response.to.have.status(400);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error is duplicate primary key SqlError\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.eql(\"SqlError\");\r",
+							"    pm.expect(responseJson.code).to.eql(\"ER_DUP_ENTRY\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 200ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "questionnaire",
+							"type": "file",
+							"src": "/C:/Users/ef200/Documents/SoftEng22-29/test/api-testing/testing_questionnaire_jsons/QQ000.json"
+						},
+						{
+							"key": "",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:9103/intelliq_api/admin/questionnaire_upd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9103",
+					"path": [
+						"intelliq_api",
+						"admin",
+						"questionnaire_upd"
+					],
+					"query": [
+						{
+							"key": "format",
+							"value": "",
+							"disabled": true
+						}
+					]
+				},
+				"description": "Upload questionnaire"
+			},
+			"response": []
+		}
+	]
+}

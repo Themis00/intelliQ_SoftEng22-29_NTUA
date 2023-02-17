@@ -53,7 +53,7 @@ async function insertanswer(req,res){
                 return;
             });
             //----------------------------------------------------------------------------------------------------------------------------------------------------------------
-            console.log("4");
+            
             let optFound = await new Promise((resolve) => resolve(help_result[2].find(opt => opt.optID == req.params.optionID)));
             
             if(help_result[0].length == 0){ // If there is no such questionnaire-question pair

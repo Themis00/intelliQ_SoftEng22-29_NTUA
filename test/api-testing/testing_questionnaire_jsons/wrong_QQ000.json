@@ -1,0 +1,441 @@
+
+    "questionnaireID": "QQ000",
+    "questionnaireTitle": "Προτιμήσεις καλοκαιρινών διακοπών",
+    "keywords": [
+        "διακοπές",
+        "ταξίδι",
+        "καλοκαίρι"
+    ],
+    "questions": [
+        {
+            "qID": "P00",
+            "qtext": "Ποιο είναι το mail σας;",
+            "required": "FALSE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "P00TXT",
+                    "opttxt": "<open string>",
+                    "nextqID": "P01"
+                }
+            ]
+        },
+        {
+            "qID": "P01",
+            "qtext": "Ποια είναι η ηλικία σας;",
+            "required": "TRUE",
+            "type": "profile",
+            "options": [
+                {
+                    "optID": "P01A1",
+                    "opttxt": "<30",
+                    "nextqID": "Q01"
+                },
+                {
+                    "optID": "P01A2",
+                    "opttxt": "30-50",
+                    "nextqID": "Q01"
+                },
+                {
+                    "optID": "P01A3",
+                    "opttxt": "50-70",
+                    "nextqID": "Q01"
+                },
+                {
+                    "optID": "P01A4",
+                    "opttxt": ">70",
+                    "nextqID": "Q01"
+                }
+            ]
+        },
+        {
+            "qID": "Q01",
+            "qtext": "Πόσο σημαντικές είναι για εσάς οι καλοκαιρινές διακοπές;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q01A1",
+                    "opttxt": "Καθόλου/Λίγο",
+                    "nextqID": "Q02"
+                },
+                {
+                    "optID": "Q01A2",
+                    "opttxt": "Αρκετά",
+                    "nextqID": "Q02"
+                },
+                {
+                    "optID": "Q01A3",
+                    "opttxt": "Πολύ",
+                    "nextqID": "Q02"
+                }
+            ]
+        },
+	  {
+            "qID": "Q02",
+            "qtext": "Με τι παρέα συνηθίζετε να πηγαίνετε διακοπές;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q02A1",
+                    "opttxt": "Οικογενειακά",
+                    "nextqID": "Q03"
+                },
+                {
+                    "optID": "Q02A2",
+                    "opttxt": "Με φίλους",
+                    "nextqID": "Q03"
+                },
+		    {
+                    "optID": "Q02A3",
+                    "opttxt": "Με σχέση/σύντροφο",
+                    "nextqID": "Q03"
+                },
+                {
+                    "optID": "Q02A4",
+                    "opttxt": "Μόνος-η μου",
+                    "nextqID": "Q03"
+                }
+            ]
+        },
+	  {
+            "qID": "Q03",
+            "qtext": "Σχεδιάζετε με ορισμένο budget το ταξίδι διακοπών σας;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+		    {
+                    "optID": "Q03A1",
+                    "opttxt": "Ναι",
+                    "nextqID": "Q04"
+                },
+                {
+                    "optID": "Q03A2",
+                    "opttxt": "Όχι",
+                    "nextqID": "Q05"
+                }
+            ]
+        },
+	  {
+            "qID": "Q04",
+            "qtext": "Πόσα χρήματα (ευρώ) θα ήσασταν διατεθειμένος-η να ξοδέψετε για το ταξίδι των διακοπών σας;",
+            "required": "FALSE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q04A1",
+                    "opttxt": "<200",
+                    "nextqID": "Q05"
+                },
+                {
+                    "optID": "Q04A2",
+                    "opttxt": "200-500",
+                    "nextqID": "Q05"
+                },
+		    {
+                    "optID": "Q04A3",
+                    "opttxt": "500-700",
+                    "nextqID": "Q05"
+                },
+                {
+                    "optID": "Q04A4",
+                    "opttxt": ">700",
+                    "nextqID": "Q05"
+                }
+            ]
+        },
+	  {
+            "qID": "Q05",
+            "qtext": "Τι τύπο προορισμού προτιμάτε;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q05A1",
+                    "opttxt": "Ορεινό",
+                    "nextqID": "Q06"
+                },
+                {
+                    "optID": "Q05A2",
+                    "opttxt": "Παραθαλάσσιο",
+                    "nextqID": "Q07"
+                },
+		    {
+                    "optID": "Q05A3",
+                    "opttxt": "Αστικό",
+                    "nextqID": "Q08"
+                }
+            ]
+        },
+	  {
+            "qID": "Q06",
+            "qtext": "Ποιον από τους 3 παρακάτω προορισμούς θεωρείτε καλύτερο με βάση τις προτιμήσεις σας;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q06A1",
+                    "opttxt": "Αράχωβα",
+                    "nextqID": "Q09"
+                },
+                {
+                    "optID": "Q06A2",
+                    "opttxt": "Μέτσοβο",
+                    "nextqID": "Q09"
+                },
+		    {
+                    "optID": "Q06A3",
+                    "opttxt": "Παρνασσός",
+                    "nextqID": "Q09"
+                }
+            ]
+        },
+	  {
+            "qID": "Q07",
+            "qtext": "Προτιμάτε περισσότερο ένα ηπειρωτικό ή νησιωτικό παραθαλάσσιο θέρετρο;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q07A1",
+                    "opttxt": "Ηπειρωτικό",
+                    "nextqID": "Q10"
+                },
+                {
+                    "optID": "Q07A2",
+                    "opttxt": "Νησιωτικό",
+                    "nextqID": "Q10"
+                }
+            ]
+        },
+	  {
+            "qID": "Q08",
+            "qtext": "Προτιμάτε ένα ταξίδι σε πόλη της Ελλάδας ή του εξωτερικού;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q08A1",
+                    "opttxt": "Ελλάδα",
+                    "nextqID": "Q12"
+                },
+                {
+                    "optID": "Q08A2",
+                    "opttxt": "Εξωτερικό",
+                    "nextqID": "Q12"
+                }
+            ]
+        },
+	  {
+            "qID": "Q09",
+            "qtext": "Κάνετε ορειβασία;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q09A1",
+                    "opttxt": "Σπάνια-καθόλου",
+                    "nextqID": "Q14"
+                },
+                {
+                    "optID": "Q09A2",
+                    "opttxt": "Περιστασιακά",
+                    "nextqID": "Q14"
+                },
+		    {
+                    "optID": "Q09A3",
+                    "opttxt": "Τακτικά",
+                    "nextqID": "Q14"
+                }
+            ]
+        },
+	  {
+            "qID": "Q10",
+            "qtext": "Σας αρέσουν τα θαλάσσια σπορ;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q10A1",
+                    "opttxt": "Ναι",
+                    "nextqID": "Q11"
+                },
+                {
+                    "optID": "Q10A2",
+                    "opttxt": "Όχι",
+                    "nextqID": "Q14"
+                }
+            ]
+        },
+	  {
+            "qID": "Q11",
+            "qtext": "Κάνετε θαλάσσιο σκι;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q11A1",
+                    "opttxt": "Σπάνια-καθόλου",
+                    "nextqID": "Q14"
+                },
+                {
+                    "optID": "Q11A2",
+                    "opttxt": "Περιστασιακά",
+                    "nextqID": "Q14"
+                },
+		    {
+                    "optID": "Q11A3",
+                    "opttxt": "Τακτικά",
+                    "nextqID": "Q14"
+                }
+            ]
+        },
+	  {
+            "qID": "Q12",
+            "qtext": "Συνηθίζετε να επισκέπτεστε τα αξιοθέατα μιας πόλης;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q12A1",
+                    "opttxt": "Όχι",
+                    "nextqID": "Q14"
+                },
+                {
+                    "optID": "Q12A2",
+                    "opttxt": "Μόνο τα σημαντικά",
+                    "nextqID": "Q13"
+                },
+		    {
+                    "optID": "Q12A3",
+                    "opttxt": "Ναι, όλα",
+                    "nextqID": "Q13"
+                }
+            ]
+        },
+	  {
+            "qID": "Q13",
+            "qtext": "Τι είδους αξιοθέατα σας κεντρίζουν το ενδιαφέρον περισσότερο;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q13A1",
+                    "opttxt": "Γραφικές περιοχές",
+                    "nextqID": "Q14"
+                },
+                {
+                    "optID": "Q13A2",
+                    "opttxt": "Μνημεία",
+                    "nextqID": "Q14"
+                },
+		    {
+                    "optID": "Q13A3",
+                    "opttxt": "Μουσεία",
+                    "nextqID": "Q14"
+                }
+            ]
+        },
+	  {
+            "qID": "Q14",
+            "qtext": "Συνηθίζετε να αγοράζετε σουβενίρ;",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q14A1",
+                    "opttxt": "Ναι",
+                    "nextqID": "Q15"
+                },
+                {
+                    "optID": "Q14A2",
+                    "opttxt": "Όχι",
+                    "nextqID": "Q16"
+                }
+            ]
+        },
+	  {
+            "qID": "Q15",
+            "qtext": "Πόσα χρήματα (ευρώ) θα ήσασταν διατεθειμένος-η να ξοδέψετε για σουβενίρ;",
+            "required": "FALSE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q15A1",
+                    "opttxt": "<20",
+                    "nextqID": "Q16"
+                },
+                {
+                    "optID": "Q15A2",
+                    "opttxt": "20-50",
+                    "nextqID": "Q16"
+                },
+		    {
+                    "optID": "Q15A3",
+                    "opttxt": "50-100",
+                    "nextqID": "Q16"
+                },
+                {
+                    "optID": "Q15A4",
+                    "opttxt": ">100",
+                    "nextqID": "Q16"
+                }
+            ]
+        },
+	  {
+            "qID": "Q16",
+            "qtext": "Θέλετε να μας δώσετε feedback για το ερωτηματολόγιο; Η γνώμη σας μετράει!",
+            "required": "TRUE",
+            "type": "question",
+            "options": [
+                {
+                    "optID": "Q16A1",
+                    "opttxt": "Ναι",
+                    "nextqID": "Q17"
+                },
+                {
+                    "optID": "Q16A2",
+                    "opttxt": "Όχι",
+                    "nextqID": "-"
+                }
+            ]
+        },
+	  {
+            "qID": "Q17",
+            "qtext": "Αξιολογήστε το ερωτηματολόγιο:",
+            "required": "TRUE",
+            "type": "feedback",
+            "options": [
+                {
+                    "optID": "Q17A1",
+                    "opttxt": "Ελλιπές",
+                    "nextqID": "Q18"
+                },
+                {
+                    "optID": "Q17A2",
+                    "opttxt": "Καλό",
+                    "nextqID": "Q18"
+                },
+		    {
+                    "optID": "Q17A3",
+                    "opttxt": "Πολύ καλό",
+                    "nextqID": "Q18"
+                }
+            ]
+        },
+	  {
+            "qID": "Q18",
+            "qtext": "Σχολιάστε οτιδήποτε περαιτέρω θεωρείτε σημαντικό.",
+            "required": "FALSE",
+            "type": "feedback",
+            "options": [
+                {
+                    "optID": "Q18TXT",
+                    "opttxt": "<open string>",
+                    "nextqID": "-"
+                }
+            ]
+        }
+    ]
+}
