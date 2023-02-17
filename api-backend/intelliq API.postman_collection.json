@@ -1,0 +1,405 @@
+{
+	"info": {
+		"_postman_id": "17b640dd-4820-4a06-b6ca-2993c49bf81a",
+		"name": "intelliq API",
+		"description": "API to support intelliq application, an application to handle smart questionnaires\n\nThe data in responses are returned as json or csv, according to the \"format\" query parameter. If format = json or it is null, then the data are returned as json, else id format = csv they are returned as csv. In any other case, an error is occured an returned as response.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25448571"
+	},
+	"item": [
+		{
+			"name": "System Function",
+			"item": [
+				{
+					"name": "getQuestionnaire",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/questionnaire/:questionnaireID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"questionnaire",
+								":questionnaireID"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "questionnaireID",
+									"value": null
+								}
+							]
+						},
+						"description": "Get an existing questionnaire."
+					},
+					"response": []
+				},
+				{
+					"name": "getQuestion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/question/:questionnaireID/:questionID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"question",
+								":questionnaireID",
+								":questionID"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "questionnaireID",
+									"value": null
+								},
+								{
+									"key": "questionID",
+									"value": null
+								}
+							]
+						},
+						"description": "Get an existing question."
+					},
+					"response": []
+				},
+				{
+					"name": "getSessionAnswers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/getsessionanswers/:questionnaireID/:session",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"getsessionanswers",
+								":questionnaireID",
+								":session"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "questionnaireID",
+									"value": null
+								},
+								{
+									"key": "session",
+									"value": null
+								}
+							]
+						},
+						"description": "Get all the answers given in a specific session"
+					},
+					"response": []
+				},
+				{
+					"name": "getQuestionAnswers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/getquestionanswers/:questionnaireID/:questionID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"getquestionanswers",
+								":questionnaireID",
+								":questionID"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "questionnaireID",
+									"value": null
+								},
+								{
+									"key": "questionID",
+									"value": null
+								}
+							]
+						},
+						"description": "Get all answers given in a specific question (for all sessions)"
+					},
+					"response": []
+				},
+				{
+					"name": "doanswer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/doanswer/:questionnaireID/:questionID/:session/:optionID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"doanswer",
+								":questionnaireID",
+								":questionID",
+								":session",
+								":optionID"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "questionnaireID",
+									"value": ""
+								},
+								{
+									"key": "questionID",
+									"value": ""
+								},
+								{
+									"key": "session",
+									"value": ""
+								},
+								{
+									"key": "optionID",
+									"value": ""
+								}
+							]
+						},
+						"description": "Insert answer to database.\n\nThere are some restrictions:\n\n1. The questionnaire ID, question ID and the option given must match, else an error is returned.\n2. The session must exist (sessions are created and returned by the startSession get request).\n3. The option ID can be ommited. In this case the value inserted in database is null and it signifies that the participant did not answer to that question, but if the question is required a error is returned.\n4. In questions that require text as answer, the text must be given in the body as json of this format: {\"ans_str\":text}.\n5. If the above json is given in a multiple choice question, an error is returned.\n6. If the above json is omitted in a required question with open answer, an error is returned.\n7. In a question with open answer in which the above json is given, the optio ID must be the one option of the question and not null else an error is returned. In addition, if the question is not required and the user wants to insert null, the json must not be included and the optio ID must be null."
+					},
+					"response": []
+				}
+			],
+			"description": "Functions required for interaction with the application"
+		},
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/healthcheck",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"healthcheck"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Check database connectivity."
+					},
+					"response": []
+				},
+				{
+					"name": "resetq",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/resetq/:questionnaireID",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"resetq",
+								":questionnaireID"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "questionnaireID",
+									"value": null
+								}
+							]
+						},
+						"description": "Delete all answers given in a specific questionnaire. If there are no data to delete, an error is returned."
+					},
+					"response": []
+				},
+				{
+					"name": "resetall",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/resetall",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"resetall"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Delete all data from database. If there are no data to delete, an error is returned."
+					},
+					"response": []
+				},
+				{
+					"name": "questionnaire_upd",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "questionnaire",
+									"type": "file",
+									"src": []
+								},
+								{
+									"key": "",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/questionnaire_upd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"questionnaire_upd"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Upload questionnaire. There are a lot of restrictions:\n\n- The questionnaire must be given in a json file with the following keys: \"questionnaireID\" which should have a string with length between 1 and 5 as value -- \"questionnaireTitle\" which should have a non zero string as value -- \"keywords\" which are optional but if they exist they must be a non-zero string or an array (of non-zero length) of non-zero strings as value -- and \"questions\".\n- The \"questions\" key's value must be an array (of non-zero length) of json objects. Each object correspond to a question and must have the following keys: \"qID\" which is the question ID and must have a string with length between 1 and 3 as value (the questions are given in the wanted order, the first qID must be < than all but it is stringly recommended that the questions are given in increasing qID order in general) -- \"qtext\" which is the question text and must have a non-zero string as value -- \"required\" which indicates if a question is required or not and it has 2 distinct valid values: \"TRUE\" and \"FALSE\" strings -- \"type\" which has 3 distinct valid values: \"profile\" (personal questions), \"question\" and \"feedback\" (questions for feedback) -- and \"options\".\n- The \"options\" key's value must be an array (of non-zero length) of json objects. Each object correspond to a option and must have the following keys: \"optID\" which is the option ID and must have a string with length between 1 and 6 as value (if there is an open answer the optID value must include the substring \"TXT\") -- \"opttext\" which is the option text and must have a non-zero string as value -- and \"nextqID\" which indicates the next question by selecting this answer, must be an existing and only following question and if the question is not required the nextqID of all options of the question must be same.\n    \n\nIf those instructions are not followed, an error is returned. Check also the questionnaire sample in data/questionnaire_jsons/ file."
+					},
+					"response": []
+				},
+				{
+					"name": "startSession",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:9103/intelliq_api/admin/session",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9103",
+							"path": [
+								"intelliq_api",
+								"admin",
+								"session"
+							],
+							"query": [
+								{
+									"key": "format",
+									"value": "",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Creates and returns a new session that is a random varchar of length 4."
+					},
+					"response": []
+				}
+			],
+			"description": "Administrator functions."
+		}
+	]
+}
