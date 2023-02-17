@@ -3,15 +3,16 @@ import {expect, test} from '@oclif/test'
 describe('resetq', () => {
   test
   .stdout()
-  .command(['resetq'])
-  .it('runs hello', ctx => {
-    expect(ctx.stdout).to.contain('hello world')
+  .command(['resetq', '--format=csv'])
+  .it('reset questions', ctx => {
+    expect(ctx.stdout).to.contain('hello jeff')
   })
 
   test
-  .stdout()
-  .command(['resetq', '--name', 'jeff'])
-  .it('runs hello --name jeff', ctx => {
-    expect(ctx.stdout).to.contain('hello jeff')
-  })
+    .stderr()
+    .command(['resetq', '--format=json'])
+    .exit(1)
+    .it('returns an error message', (ctx) => {
+      expect(ctx.stderr).to.contain('error message');
+    });
 })
